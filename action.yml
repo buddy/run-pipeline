@@ -1,0 +1,11 @@
+name: 'Run Buddy Pipeline'
+description: 'Runs Buddy CI/CD pipelines from GitHub Actions'
+author: 'Buddy'
+
+branding:
+  icon: 'play'
+  color: 'blue'
+
+runs:
+  using: 'node24'
+  main: 'dist/index.js'
