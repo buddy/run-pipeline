@@ -13,7 +13,8 @@ import {
  */
 export async function isBdyInstalled(): Promise<boolean> {
   try {
-    const exitCode = await exec('which', ['bdy'], { silent: true });
+    const command = platform() === 'win32' ? 'where' : 'which';
+    const exitCode = await exec(command, ['bdy'], { silent: true });
     return exitCode === 0;
   } catch {
     return false;
