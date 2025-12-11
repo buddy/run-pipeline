@@ -1,0 +1,21 @@
+name: Test BDY CLI Detection
+
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  test-with-setup:
+    name: Test with pre-installed CLI
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to Buddy
+        uses: buddy/login@v1
+        with:
+          token: ${{ secrets.TOKEN }}
+          region: 'EU'
+
+      - name: Run action
+        uses: ./

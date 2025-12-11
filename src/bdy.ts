@@ -1,11 +1,123 @@
 import { arch, platform } from 'node:os';
 import { info } from '@actions/core';
 import { exec } from '@actions/exec';
-import {
-  type PlatformInfo,
-  SUPPORTED_ARCHITECTURE,
-  SUPPORTED_PLATFORM,
-} from '@/const/platform';
+
+enum SUPPORTED_PLATFORM {
+  LINUX = 'linux',
+  DARWIN = 'darwin',
+  WIN32 = 'win32',
+}
+
+enum SUPPORTED_ARCHITECTURE {
+  X64 = 'x64',
+  ARM64 = 'arm64',
+}
+
+interface PlatformInfo {
+  platform: SUPPORTED_PLATFORM;
+  architecture: SUPPORTED_ARCHITECTURE;
+  downloadPrefix: string;
+  fileExtension: string;
+}
+
+/**
+ * Fetches the latest BDY CLI version from the Buddy API
+ * @param env - The environment channel (e.g., 'prod')
+ * @returns The latest version string
+ * @throws Error if the fetch fails
+ */
+async function fetchLatestVersion(env: string): Promise<string> {
+  const url = `https://es.buddy.works/bdy/${env}/latest`;
+
+  try {
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch latest version: ${response.status} ${response.statusText}`,
+      );
+    }
+
+    const version = await response.text();
+    return version.trim();
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(
+        `Failed to fetch latest version from ${url}: ${error.message}`,
+      );
+    }
+    throw new Error(`Failed to fetch latest version from ${url}`);
+  }
+}
+
+/**
+ * Detects and validates the system platform and architecture
+ * @returns Platform information including OS, architecture, and download details
+ * @throws Error if the platform/architecture combination is not supported
+ */
+function getPlatformInfo(): PlatformInfo {
+  const PLATFORM_MAP = new Map<string, SUPPORTED_PLATFORM>([
+    ['linux', SUPPORTED_PLATFORM.LINUX],
+    ['darwin', SUPPORTED_PLATFORM.DARWIN],
+    ['win32', SUPPORTED_PLATFORM.WIN32],
+  ]);
+
+  const ARCH_MAP = new Map<string, SUPPORTED_ARCHITECTURE>([
+    ['x64', SUPPORTED_ARCHITECTURE.X64],
+    ['arm64', SUPPORTED_ARCHITECTURE.ARM64],
+  ]);
+
+  const systemPlatform = platform();
+  const systemArch = arch();
+
+  const detectedPlatform = PLATFORM_MAP.get(systemPlatform);
+  const detectedArch = ARCH_MAP.get(systemArch);
+
+  if (!detectedPlatform) {
+    throw new Error(
+      `Unsupported platform: ${systemPlatform}. Only linux, darwin, and win32 are supported. `,
+    );
+  }
+
+  if (!detectedArch) {
+    throw new Error(
+      `Unsupported architecture: ${systemArch}. Only x64 and arm64 are supported. `,
+    );
+  }
+
+  // Validate platform + architecture combinations
+  if (
+    detectedPlatform === SUPPORTED_PLATFORM.DARWIN &&
+    detectedArch === SUPPORTED_ARCHITECTURE.X64
+  ) {
+    throw new Error(
+      'macOS x64 is not supported. Only darwin-arm64 binaries are available.',
+    );
+  }
+
+  if (
+    detectedPlatform === SUPPORTED_PLATFORM.WIN32 &&
+    detectedArch === SUPPORTED_ARCHITECTURE.ARM64
+  ) {
+    throw new Error(
+      'Windows ARM64 is not supported. Only win-x64 binaries are available.',
+    );
+  }
+
+  // Determine file extension and download prefix
+  const fileExtension =
+    detectedPlatform === SUPPORTED_PLATFORM.WIN32 ? '.zip' : '.tar.gz';
+  const platformName =
+    detectedPlatform === SUPPORTED_PLATFORM.WIN32 ? 'win' : detectedPlatform;
+  const downloadPrefix = `${platformName}-${detectedArch}`;
+
+  return {
+    platform: detectedPlatform,
+    architecture: detectedArch,
+    downloadPrefix,
+    fileExtension,
+  };
+}
 
 /**
  * Checks if BDY CLI is already installed
@@ -54,81 +166,12 @@ export async function getBdyVersion(): Promise<string> {
 }
 
 /**
- * Detects and validates the system platform and architecture
- * @returns Platform information including OS, architecture, and download details
- * @throws Error if the platform/architecture combination is not supported
- */
-function getPlatformInfo(): PlatformInfo {
-  const PLATFORM_MAP = new Map<string, SUPPORTED_PLATFORM>([
-    ['linux', SUPPORTED_PLATFORM.LINUX],
-    ['darwin', SUPPORTED_PLATFORM.DARWIN],
-    ['win32', SUPPORTED_PLATFORM.WIN32],
-  ]);
-
-  const ARCH_MAP = new Map<string, SUPPORTED_ARCHITECTURE>([
-    ['x64', SUPPORTED_ARCHITECTURE.X64],
-    ['arm64', SUPPORTED_ARCHITECTURE.ARM64],
-  ]);
-
-  const systemPlatform = platform();
-  const systemArch = arch();
-
-  const detectedPlatform = PLATFORM_MAP.get(systemPlatform);
-  const detectedArch = ARCH_MAP.get(systemArch);
-
-  if (!detectedPlatform) {
-    throw new Error(
-      `Unsupported platform: ${systemPlatform}. Only linux, darwin, and win32 are supported.`,
-    );
-  }
-
-  if (!detectedArch) {
-    throw new Error(
-      `Unsupported architecture: ${systemArch}. Only x64 and arm64 are supported.`,
-    );
-  }
-
-  // Validate platform + architecture combinations
-  if (
-    detectedPlatform === SUPPORTED_PLATFORM.DARWIN &&
-    detectedArch === SUPPORTED_ARCHITECTURE.X64
-  ) {
-    throw new Error(
-      'macOS x64 is not supported. Only darwin-arm64 binaries are available.',
-    );
-  }
-
-  if (
-    detectedPlatform === SUPPORTED_PLATFORM.WIN32 &&
-    detectedArch === SUPPORTED_ARCHITECTURE.ARM64
-  ) {
-    throw new Error(
-      'Windows ARM64 is not supported. Only win-x64 binaries are available.',
-    );
-  }
-
-  // Determine file extension and download prefix
-  const fileExtension =
-    detectedPlatform === SUPPORTED_PLATFORM.WIN32 ? '.zip' : '.tar.gz';
-  const platformName =
-    detectedPlatform === SUPPORTED_PLATFORM.WIN32 ? 'win' : detectedPlatform;
-  const downloadPrefix = `${platformName}-${detectedArch}`;
-
-  return {
-    platform: detectedPlatform,
-    architecture: detectedArch,
-    downloadPrefix,
-    fileExtension,
-  };
-}
-
-/**
  * Installs BDY CLI using the download method
  */
 async function installBdyCli(): Promise<void> {
   const platformInfo = getPlatformInfo();
   const env = 'prod';
-  const version = 'latest';
+  const version = await fetchLatestVersion(env);
 
   info(`Installing BDY CLI (${version}) for ${platformInfo.downloadPrefix}...`);
 
