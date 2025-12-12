@@ -28,7 +28,7 @@ async function runPipeline(
   project: string,
   identifier: string,
   token: string,
-  apiEndpoint: string,
+  _apiEndpoint: string,
 ): Promise<void> {
   info(`Running pipeline: ${identifier} in ${workspace}/${project}`);
 
@@ -42,8 +42,8 @@ async function runPipeline(
     project,
     '--token',
     token,
-    '--api',
-    apiEndpoint,
+    'region',
+    'eu',
   ];
 
   let stderr = '';

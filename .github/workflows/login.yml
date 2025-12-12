@@ -16,6 +16,7 @@ jobs:
         with:
           token: ${{ secrets.TOKEN }}
           region: 'EU'
+          debug: true
 
       - name: Run pipeline
         uses: ./
