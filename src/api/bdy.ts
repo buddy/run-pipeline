@@ -197,8 +197,6 @@ async function installBdyCli(): Promise<void> {
   }
 
   await exec('rm', [fileName]);
-
-  info('BDY CLI installed successfully');
 }
 
 /**
