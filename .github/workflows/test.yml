@@ -1,31 +1,30 @@
-name: Test BDY CLI Detection
+name: Lint
 
 on: [push, pull_request, workflow_dispatch]
 
 jobs:
-  test-with-setup:
-    name: Test with pre-installed CLI
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install BDY CLI via buddy/setup
-        uses: buddy/setup@main
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          env: 'prod'
+          node-version: '24'
+          cache: 'pnpm'
 
-      - name: Run rp action (should detect existing CLI)
-        uses: ./
+      - name: Install dependencies
+        run: pnpm install
 
-  test-without-setup:
-    name: Test without pre-installed CLI
-    runs-on: ubuntu-latest
+      - name: Run lint
+        run: pnpm lint
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Run rp action (should install CLI automatically)
-        uses: ./
+      - name: Run type check
+        run: pnpm lint:types

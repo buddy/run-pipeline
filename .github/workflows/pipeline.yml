@@ -1,4 +1,4 @@
-name: Test BDY CLI Detection
+name: Run Buddy Pipeline from GitHub Actions
 
 on: [push, pull_request, workflow_dispatch]
 
@@ -16,7 +16,6 @@ jobs:
         with:
           token: ${{ secrets.TOKEN }}
           region: 'US'
-          debug: true
 
       - name: Run pipeline
         uses: ./
