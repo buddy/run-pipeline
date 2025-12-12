@@ -31,6 +31,9 @@ inputs:
   revision:
     description: 'Repository revision (commit SHA)'
     required: false
+  pull-request:
+    description: 'Repository pull request ID'
+    required: false
 
 runs:
   using: 'node24'

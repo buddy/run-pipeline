@@ -17,6 +17,7 @@ async function run(): Promise<void> {
     branch: getInput('branch') || undefined,
     tag: getInput('tag') || undefined,
     revision: getInput('revision') || undefined,
+    pullRequest: getInput('pull-request') || undefined,
   };
 
   await runPipeline(inputs);

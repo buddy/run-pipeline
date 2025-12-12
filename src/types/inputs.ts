@@ -7,4 +7,5 @@ export interface PipelineInputs {
   branch?: string;
   tag?: string;
   revision?: string;
+  pullRequest?: string;
 }
