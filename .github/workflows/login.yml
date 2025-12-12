@@ -17,5 +17,9 @@ jobs:
           token: ${{ secrets.TOKEN }}
           region: 'EU'
 
-      - name: Run action
+      - name: Run pipeline
         uses: ./
+        with:
+          workspace: mganczarczyk
+          project: aaaaa
+          identifier: t1

@@ -6,6 +6,17 @@ branding:
   icon: 'play'
   color: 'blue'
 
+inputs:
+  workspace:
+    description: 'Buddy workspace domain'
+    required: true
+  project:
+    description: 'Buddy project name (URL handle)'
+    required: true
+  identifier:
+    description: 'Pipeline identifier (human-readable ID)'
+    required: true
+
 runs:
   using: 'node24'
   main: 'dist/index.js'
