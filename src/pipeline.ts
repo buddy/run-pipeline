@@ -37,6 +37,8 @@ export async function runPipeline(inputs: PipelineInputs): Promise<void> {
     inputs.project,
   ];
 
+  if (inputs.comment) args.push('--comment', inputs.comment);
+
   const output = await executeCommand('bdy', args);
   if (output) info(output);
 }

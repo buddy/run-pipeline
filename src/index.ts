@@ -12,6 +12,7 @@ async function run(): Promise<void> {
     workspace: getInput('workspace', { required: true }),
     project: getInput('project', { required: true }),
     identifier: getInput('identifier', { required: true }),
+    comment: getInput('comment') || undefined,
   };
 
   await runPipeline(inputs);

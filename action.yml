@@ -16,6 +16,9 @@ inputs:
   identifier:
     description: 'Pipeline identifier (human-readable ID)'
     required: true
+  comment:
+    description: 'Run comment (e.g., commit hash, build info)'
+    required: false
 
 runs:
   using: 'node24'
