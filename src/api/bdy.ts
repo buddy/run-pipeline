@@ -209,11 +209,11 @@ export async function ensureBdyInstalled(): Promise<void> {
 
   if (isInstalled) {
     const version = await getBdyVersion();
-    info(`✅ BDY CLI is already installed (version: ${version})`);
+    info(`BDY CLI is already installed (version: ${version})`);
   } else {
     info('BDY CLI not found, installing...');
     await installBdyCli();
     const version = await getBdyVersion();
-    info(`✅ BDY CLI installed successfully (version: ${version})`);
+    info(`BDY CLI installed successfully (version: ${version})`);
   }
 }
