@@ -13,6 +13,7 @@ async function run(): Promise<void> {
     project: getInput('project', { required: true }),
     identifier: getInput('identifier', { required: true }),
     comment: getInput('comment') || undefined,
+    wait: getInput('wait') || undefined,
   };
 
   await runPipeline(inputs);

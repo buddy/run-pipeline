@@ -1,4 +1,4 @@
-import { info, setSecret } from '@actions/core';
+import { getInput, info, setSecret } from '@actions/core';
 import type { PipelineInputs } from '@/types/inputs';
 import { executeCommand } from '@/utils/command';
 
@@ -38,6 +38,21 @@ export async function runPipeline(inputs: PipelineInputs): Promise<void> {
   ];
 
   if (inputs.comment) args.push('--comment', inputs.comment);
+
+  if (inputs.wait) {
+    let wait = Number.parseInt(inputs.wait, 10);
+    if (Number.isNaN(wait)) {
+      throw new Error(
+        `Invalid wait value: "${inputs.wait}". Must be a number.`,
+      );
+    }
+
+    if (wait < 0) {
+      throw new Error('Wait time cannot be negative');
+    }
+
+    args.push('--wait', inputs.wait.toString());
+  }
 
   const output = await executeCommand('bdy', args);
   if (output) info(output);

@@ -19,6 +19,9 @@ inputs:
   comment:
     description: 'Run comment (e.g., commit hash, build info)'
     required: false
+  wait:
+    description: 'Wait for run to finish (minutes). If not provided, returns execution URL immediately.'
+    required: false
 
 runs:
   using: 'node24'

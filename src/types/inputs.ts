@@ -3,4 +3,5 @@ export interface PipelineInputs {
   project: string;
   identifier: string;
   comment?: string;
+  wait?: string;
 }
