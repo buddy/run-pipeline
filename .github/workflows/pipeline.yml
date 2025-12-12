@@ -4,7 +4,7 @@ on: [push, pull_request, workflow_dispatch]
 
 jobs:
   test-with-setup:
-    name: Test with pre-installed CLI
+    name: Test with minimal setup
     runs-on: ubuntu-latest
 
     steps:
