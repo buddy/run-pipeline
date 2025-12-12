@@ -15,12 +15,12 @@ jobs:
         uses: buddy/login@v1
         with:
           token: ${{ secrets.TOKEN }}
-          region: 'EU'
+          region: 'US'
           debug: true
 
       - name: Run pipeline
         uses: ./
         with:
-          workspace: mganczarczyk
-          project: aaaaa
-          identifier: t1
+          workspace: buddy-workshop-devs
+          project: tttt
+          identifier: a1
