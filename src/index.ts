@@ -18,7 +18,7 @@ async function run(): Promise<void> {
 
   await runPipeline(inputs);
 
-  info('Pipeline run initiated successfully');
+  if (!inputs.wait) info('Pipeline run initiated successfully');
 }
 
 run()
