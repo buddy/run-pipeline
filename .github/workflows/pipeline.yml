@@ -25,3 +25,5 @@ jobs:
           identifier: a1
           comment: ${{ github.sha }}
           wait: 1
+          branch: master
+          tag: v1

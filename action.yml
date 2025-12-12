@@ -22,6 +22,15 @@ inputs:
   wait:
     description: 'Wait for run to finish (minutes). If not provided, returns execution URL immediately.'
     required: false
+  branch:
+    description: 'Repository branch name'
+    required: false
+  tag:
+    description: 'Repository tag name'
+    required: false
+  revision:
+    description: 'Repository revision (commit SHA)'
+    required: false
 
 runs:
   using: 'node24'

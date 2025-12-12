@@ -38,6 +38,9 @@ export async function runPipeline(inputs: PipelineInputs): Promise<void> {
   ];
 
   if (inputs.comment) args.push('--comment', inputs.comment);
+  if (inputs.branch) args.push('--branch', inputs.branch);
+  if (inputs.tag) args.push('--tag', inputs.tag);
+  if (inputs.revision) args.push('--revision', inputs.revision);
 
   if (inputs.wait) {
     let wait = Number.parseInt(inputs.wait, 10);

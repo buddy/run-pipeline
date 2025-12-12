@@ -14,6 +14,9 @@ async function run(): Promise<void> {
     identifier: getInput('identifier', { required: true }),
     comment: getInput('comment') || undefined,
     wait: getInput('wait') || undefined,
+    branch: getInput('branch') || undefined,
+    tag: getInput('tag') || undefined,
+    revision: getInput('revision') || undefined,
   };
 
   await runPipeline(inputs);

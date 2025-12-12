@@ -4,4 +4,7 @@ export interface PipelineInputs {
   identifier: string;
   comment?: string;
   wait?: string;
+  branch?: string;
+  tag?: string;
+  revision?: string;
 }
