@@ -23,8 +23,14 @@ export function checkBuddyCredentials(): void {
 }
 
 export async function runPipeline(inputs: PipelineInputs): Promise<void> {
+  const refInfo: string[] = [];
+  if (inputs.branch) refInfo.push(`branch '${inputs.branch}'`);
+  if (inputs.tag) refInfo.push(`tag '${inputs.tag}'`);
+  if (inputs.revision) refInfo.push(`revision '${inputs.revision}'`);
+
+  const refString = refInfo.length > 0 ? ` (on ${refInfo.join(', ')})` : '';
   info(
-    `Running pipeline: ${inputs.identifier} in ${inputs.workspace}/${inputs.project}`,
+    `Running pipeline: ${inputs.identifier} in ${inputs.workspace}/${inputs.project}${refString}`,
   );
 
   const args = [
