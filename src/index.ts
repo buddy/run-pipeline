@@ -1,6 +1,6 @@
 import { getInput, info, setFailed, setSecret } from '@actions/core';
-import { exec } from '@actions/exec';
 import { ensureBdyInstalled } from '@/bdy';
+import { executeCommand } from '@/command';
 
 function checkBuddyLogin(): { token: string; endpoint: string } {
   const token = process.env.BUDDY_TOKEN;
@@ -27,8 +27,8 @@ async function runPipeline(
   workspace: string,
   project: string,
   identifier: string,
-  token: string,
-  apiEndpoint: string,
+  // token: string,
+  // apiEndpoint: string,
 ): Promise<void> {
   info(`Running pipeline: ${identifier} in ${workspace}/${project}`);
 
@@ -40,37 +40,34 @@ async function runPipeline(
     workspace,
     '--project',
     project,
-    '--token',
-    token,
-    '--api',
-    apiEndpoint,
+    // '--token',
+    // token,
+    // '--api',
+    // apiEndpoint,
   ];
 
-  let stderr = '';
-  const exitCode = await exec('bdy', args, {
-    ignoreReturnCode: true,
-    listeners: {
-      stderr: (data: Buffer) => {
-        stderr += data.toString();
-      },
-    },
-  });
+  const output = await executeCommand('bdy', args);
 
-  if (exitCode !== 0) {
-    throw new Error(stderr || `bdy command failed with exit code ${exitCode}`);
+  if (output) {
+    info(output);
   }
 }
 
 async function run(): Promise<void> {
   try {
     await ensureBdyInstalled();
-    const { token, endpoint } = checkBuddyLogin();
+    checkBuddyLogin();
 
     const workspace = getInput('workspace', { required: true });
     const project = getInput('project', { required: true });
     const identifier = getInput('identifier', { required: true });
 
-    await runPipeline(workspace, project, identifier, token, endpoint);
+    await runPipeline(
+      workspace,
+      project,
+      identifier,
+      // token, endpoint
+    );
 
     info('Pipeline run initiated successfully');
   } catch (error) {
