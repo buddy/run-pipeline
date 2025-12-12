@@ -54,6 +54,5 @@ export async function runPipeline(inputs: PipelineInputs): Promise<void> {
     args.push('--wait', inputs.wait.toString());
   }
 
-  const output = await executeCommand('bdy', args);
-  if (output) info(output);
+  await executeCommand('bdy', args);
 }

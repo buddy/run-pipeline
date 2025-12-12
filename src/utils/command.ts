@@ -12,10 +12,14 @@ export async function executeCommand(
     silent: true,
     listeners: {
       stdout: (data: Buffer) => {
-        stdout += data.toString();
+        const output = data.toString();
+        stdout += output;
+        process.stdout.write(output);
       },
       stderr: (data: Buffer) => {
-        stderr += data.toString();
+        const output = data.toString();
+        stderr += output;
+        process.stderr.write(output);
       },
     },
   });
