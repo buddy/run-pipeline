@@ -8,4 +8,7 @@ export interface PipelineInputs {
   tag?: string;
   revision?: string;
   pullRequest?: string;
+  refresh?: boolean;
+  clearCache?: boolean;
+  priority?: string;
 }

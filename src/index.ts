@@ -18,6 +18,9 @@ async function run(): Promise<void> {
     tag: getInput('tag') || undefined,
     revision: getInput('revision') || undefined,
     pullRequest: getInput('pull-request') || undefined,
+    refresh: getInput('refresh') === 'true',
+    clearCache: getInput('clear-cache') === 'true',
+    priority: getInput('priority') || undefined,
   };
 
   await runPipeline(inputs);

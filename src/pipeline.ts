@@ -2,6 +2,12 @@ import { getInput, info, setSecret } from '@actions/core';
 import type { PipelineInputs } from '@/types/inputs';
 import { executeCommand } from '@/utils/command';
 
+enum PRIORITY {
+  LOW = 'LOW',
+  NORMAL = 'NORMAL',
+  HIGH = 'HIGH',
+}
+
 export function checkBuddyCredentials(): void {
   const token = process.env.BUDDY_TOKEN;
   const endpoint = process.env.BUDDY_API_ENDPOINT;
@@ -49,6 +55,19 @@ export async function runPipeline(inputs: PipelineInputs): Promise<void> {
   if (inputs.tag) args.push('--tag', inputs.tag);
   if (inputs.revision) args.push('--revision', inputs.revision);
   if (inputs.pullRequest) args.push('--pull-request', inputs.pullRequest);
+  if (inputs.refresh) args.push('--refresh');
+  if (inputs.clearCache) args.push('--clear-cache');
+
+  if (inputs.priority) {
+    const validPriorities: string[] = Object.values(PRIORITY);
+    const upperPriority = inputs.priority.toUpperCase();
+    if (!validPriorities.includes(upperPriority)) {
+      throw new Error(
+        `Invalid priority: "${inputs.priority}". Must be one of: ${validPriorities.join(', ')}`,
+      );
+    }
+    args.push('--priority', upperPriority);
+  }
 
   if (inputs.wait) {
     let wait = Number.parseInt(inputs.wait, 10);

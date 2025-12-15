@@ -27,3 +27,16 @@ jobs:
           wait: 1
           branch: master
           tag: v1
+
+      - name: Run pipeline with advanced options
+        uses: ./
+        with:
+          workspace: buddy-workshop-devs
+          project: tttt
+          identifier: a1_2
+          comment: 'Testing refresh, cache, priority'
+          refresh: true
+          clear-cache: true
+          priority: HIGH
+          wait: 1
+          branch: master
