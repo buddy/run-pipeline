@@ -43,6 +43,9 @@ inputs:
   priority:
     description: 'Run priority (LOW, NORMAL, or HIGH). Default is NORMAL'
     required: false
+  region:
+    description: 'Override default region (eu or us)'
+    required: false
 
 runs:
   using: 'node24'

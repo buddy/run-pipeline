@@ -21,6 +21,7 @@ async function run(): Promise<void> {
     refresh: getInput('refresh') === 'true',
     clearCache: getInput('clear-cache') === 'true',
     priority: getInput('priority') || undefined,
+    region: getInput('region') || undefined,
   };
 
   await runPipeline(inputs);

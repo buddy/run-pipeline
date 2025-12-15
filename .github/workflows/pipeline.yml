@@ -38,5 +38,14 @@ jobs:
           refresh: true
           clear-cache: true
           priority: HIGH
-          wait: 1
           branch: master
+
+      - name: Run pipeline with region override
+        uses: ./
+        with:
+          workspace: buddy-workshop-devs
+          project: tttt
+          identifier: a1_2
+          comment: 'Testing region override to US'
+          branch: master
+          region: us

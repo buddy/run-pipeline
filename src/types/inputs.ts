@@ -11,4 +11,5 @@ export interface PipelineInputs {
   refresh?: boolean;
   clearCache?: boolean;
   priority?: string;
+  region?: string;
 }

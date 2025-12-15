@@ -8,6 +8,11 @@ enum PRIORITY {
   HIGH = 'HIGH',
 }
 
+enum REGION {
+  EU = 'eu',
+  US = 'us',
+}
+
 export function checkBuddyCredentials(): void {
   const token = process.env.BUDDY_TOKEN;
   const endpoint = process.env.BUDDY_API_ENDPOINT;
@@ -67,6 +72,17 @@ export async function runPipeline(inputs: PipelineInputs): Promise<void> {
       );
     }
     args.push('--priority', upperPriority);
+  }
+
+  if (inputs.region) {
+    const validRegions: string[] = Object.values(REGION);
+    const lowerRegion = inputs.region.toLowerCase();
+    if (!validRegions.includes(lowerRegion)) {
+      throw new Error(
+        `Invalid region: "${inputs.region}". Must be one of: ${validRegions.join(', ')}`,
+      );
+    }
+    args.push('--region', lowerRegion);
   }
 
   if (inputs.wait) {
