@@ -20,6 +20,9 @@ interface PlatformInfo {
   fileExtension: string;
 }
 
+const BDY_ENV = 'prod';
+const VERSION_REGEX = /^\d+\.\d+\.\d+(-[\w.]+)?/;
+
 /**
  * Fetches the latest BDY CLI version from the Buddy API
  * @param env - The environment channel (e.g., 'prod')
@@ -151,10 +154,9 @@ export async function getBdyVersion(): Promise<string> {
 
     const lines = output.trim().split('\n');
 
-    // Find the last line that looks like a version (X.Y.Z or X.Y.Z-suffix)
     for (let i = lines.length - 1; i >= 0; i--) {
       const line = lines[i]?.trim();
-      if (line && /^\d+\.\d+\.\d+(-[\w.]+)?/.test(line)) {
+      if (line && VERSION_REGEX.test(line)) {
         return line;
       }
     }
@@ -170,13 +172,12 @@ export async function getBdyVersion(): Promise<string> {
  */
 async function installBdyCli(): Promise<void> {
   const platformInfo = getPlatformInfo();
-  const env = 'prod';
-  const version = await fetchLatestVersion(env);
+  const version = await fetchLatestVersion(BDY_ENV);
 
   info(`Installing BDY CLI (${version}) for ${platformInfo.downloadPrefix}...`);
 
   const fileName = `bdy${platformInfo.fileExtension}`;
-  const url = `https://es.buddy.works/bdy/${env}/${version}/${platformInfo.downloadPrefix}${platformInfo.fileExtension}`;
+  const url = `https://es.buddy.works/bdy/${BDY_ENV}/${version}/${platformInfo.downloadPrefix}${platformInfo.fileExtension}`;
 
   // macOS requires creating the directory first
   if (platformInfo.platform === SUPPORTED_PLATFORM.DARWIN) {

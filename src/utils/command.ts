@@ -1,35 +1,42 @@
 import { exec } from '@actions/exec';
 
+interface CommandOutput {
+  stdout: string;
+  stderr: string;
+}
+
+function createStreamListener(
+  output: CommandOutput,
+  stream: 'stdout' | 'stderr',
+) {
+  return (data: Buffer) => {
+    const text = data.toString();
+    output[stream] += text;
+    process[stream].write(text);
+  };
+}
+
 export async function executeCommand(
   command: string,
   args: string[],
 ): Promise<string> {
-  let stderr = '';
-  let stdout = '';
+  const output: CommandOutput = { stdout: '', stderr: '' };
 
   const exitCode = await exec(command, args, {
     ignoreReturnCode: true,
     silent: true,
     listeners: {
-      stdout: (data: Buffer) => {
-        const output = data.toString();
-        stdout += output;
-        process.stdout.write(output);
-      },
-      stderr: (data: Buffer) => {
-        const output = data.toString();
-        stderr += output;
-        process.stderr.write(output);
-      },
+      stdout: createStreamListener(output, 'stdout'),
+      stderr: createStreamListener(output, 'stderr'),
     },
   });
 
   if (exitCode !== 0) {
-    throw new Error(
-      stderr ||
-        `Command failed with exit code ${exitCode}: ${command} ${args.join(' ')}`,
-    );
+    const errorMessage =
+      output.stderr ||
+      `Command failed with exit code ${exitCode}: ${command} ${args.join(' ')}`;
+    throw new Error(errorMessage);
   }
 
-  return stdout.trim();
+  return output.stdout.trim();
 }
