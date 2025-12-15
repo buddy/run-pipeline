@@ -13,6 +13,13 @@ enum REGION {
   US = 'us',
 }
 
+function prepareVariables(input: string): string[] {
+  return input
+    .split(/[\n,]/)
+    .map((v) => v.trim())
+    .filter((v) => v.length > 0);
+}
+
 export function checkBuddyCredentials(): void {
   const token = process.env.BUDDY_TOKEN;
   const endpoint = process.env.BUDDY_API_ENDPOINT;
@@ -87,6 +94,30 @@ export async function runPipeline(inputs: PipelineInputs): Promise<void> {
     )?.[0];
     info(`Overriding region to: ${regionKey}`);
     args.push('--region', region);
+  }
+
+  if (inputs.variable) {
+    const variables = prepareVariables(inputs.variable);
+    for (const variable of variables) {
+      if (!variable.includes(':')) {
+        throw new Error(
+          `Invalid variable format: "${variable}". Must be in key:value format.`,
+        );
+      }
+      args.push('--variable', variable);
+    }
+  }
+
+  if (inputs.variableMasked) {
+    const variables = prepareVariables(inputs.variableMasked);
+    for (const variable of variables) {
+      if (!variable.includes(':')) {
+        throw new Error(
+          `Invalid masked variable format: "${variable}". Must be in key:value format.`,
+        );
+      }
+      args.push('--variable-masked', variable);
+    }
   }
 
   if (inputs.wait) {

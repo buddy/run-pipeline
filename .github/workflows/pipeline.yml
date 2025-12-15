@@ -49,3 +49,17 @@ jobs:
           comment: 'Testing region override to US'
           branch: master
           region: us
+
+      - name: Run pipeline with variables
+        uses: ./
+        with:
+          workspace: buddy-workshop-devs
+          project: tttt
+          identifier: masked
+          comment: 'Testing variables and masked variables'
+          variable: |
+            var1:value1
+            var2:value2
+            var3:value3
+            var4:value4
+          variable-masked: masked1:secret1,masked2:secret2,masked3:secret3

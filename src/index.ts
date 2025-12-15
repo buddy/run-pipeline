@@ -22,6 +22,8 @@ async function run(): Promise<void> {
     clearCache: getInput('clear-cache') === 'true',
     priority: getInput('priority') || undefined,
     region: getInput('region') || undefined,
+    variable: getInput('variable') || undefined,
+    variableMasked: getInput('variable-masked') || undefined,
   };
 
   await runPipeline(inputs);

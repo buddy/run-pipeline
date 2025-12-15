@@ -46,6 +46,12 @@ inputs:
   region:
     description: 'Override default region (eu or us)'
     required: false
+  variable:
+    description: 'Variables in key:value format (one per line or comma-separated)'
+    required: false
+  variable-masked:
+    description: 'Masked variables in key:value format (one per line or comma-separated)'
+    required: false
 
 runs:
   using: 'node24'

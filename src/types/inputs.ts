@@ -12,4 +12,6 @@ export interface PipelineInputs {
   clearCache?: boolean;
   priority?: string;
   region?: string;
+  variable?: string;
+  variableMasked?: string;
 }
