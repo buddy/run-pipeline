@@ -1,0 +1,166 @@
+name: Edge Cases Testing
+
+on: [workflow_dispatch]
+
+jobs:
+  validation-errors:
+    name: Test validation errors
+    runs-on: ubuntu-latest
+    continue-on-error: true
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to Buddy
+        uses: buddy/login@v1
+        with:
+          token: ${{ secrets.TOKEN }}
+          region: 'US'
+
+      - name: Test invalid region
+        continue-on-error: true
+        uses: ./
+        with:
+          workspace: buddy-workshop-devs
+          project: tttt
+          identifier: a1
+          region: INVALID_REGION
+
+      - name: Test invalid priority
+        continue-on-error: true
+        uses: ./
+        with:
+          workspace: buddy-workshop-devs
+          project: tttt
+          identifier: a1
+          priority: SUPER_HIGH
+
+      - name: Test negative wait
+        continue-on-error: true
+        uses: ./
+        with:
+          workspace: buddy-workshop-devs
+          project: tttt
+          identifier: a1
+          wait: -5
+
+      - name: Test variable without colon
+        continue-on-error: true
+        uses: ./
+        with:
+          workspace: buddy-workshop-devs
+          project: tttt
+          identifier: a1
+          variable: |
+            validkey:validvalue
+            invalidvariablewithoutcolon
+            anotherkey:anothervalue
+
+      - name: Test variable with many colons
+        continue-on-error: true
+        uses: ./
+        with:
+          workspace: buddy-workshop-devs
+          project: tttt
+          identifier: a1
+          variable: key:value:with:many:colons::::::
+
+  cli-errors:
+    name: Test CLI-level errors
+    runs-on: ubuntu-latest
+    continue-on-error: true
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to Buddy
+        uses: buddy/login@v1
+        with:
+          token: ${{ secrets.TOKEN }}
+          region: 'US'
+
+      - name: Test non-existing workspace
+        continue-on-error: true
+        uses: ./
+        with:
+          workspace: this-workspace-does-not-exist-12345
+          project: tttt
+          identifier: a1
+
+      - name: Test non-existing project
+        continue-on-error: true
+        uses: ./
+        with:
+          workspace: buddy-workshop-devs
+          project: this-project-does-not-exist-12345
+          identifier: a1
+
+      - name: Test non-existing branch
+        continue-on-error: true
+        uses: ./
+        with:
+          workspace: buddy-workshop-devs
+          project: tttt
+          identifier: a1
+          branch: non-existing-branch-xyz-12345
+
+      - name: Test non-existing action ID
+        continue-on-error: true
+        uses: ./
+        with:
+          workspace: buddy-workshop-devs
+          project: tttt
+          identifier: action-pick
+          action: 99999999
+
+      - name: Test invalid schedule format
+        continue-on-error: true
+        uses: ./
+        with:
+          workspace: buddy-workshop-devs
+          project: tttt
+          identifier: a1
+          schedule: invalid-schedule-format
+
+  edge-cases-should-work:
+    name: Test edge cases that should work
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to Buddy
+        uses: buddy/login@v1
+        with:
+          token: ${{ secrets.TOKEN }}
+          region: 'US'
+
+      - name: Test comment with markdown
+        uses: ./
+        with:
+          workspace: buddy-workshop-devs
+          project: tttt
+          identifier: a1
+          comment: |
+            # Test Comment with Markdown
+
+            - **Bold text**
+            - *Italic text*
+            - `code block`
+
+            ## Subsection
+
+            This should work fine!
+
+      - name: Test non-boolean refresh/clear-cache
+        uses: ./
+        with:
+          workspace: buddy-workshop-devs
+          project: tttt
+          identifier: a1
+          comment: 'Testing non-boolean values - should be treated as false'
+          refresh: yes
+          clear-cache: 1
