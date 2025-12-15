@@ -44,7 +44,7 @@ inputs:
     description: 'Run priority (LOW, NORMAL, or HIGH). Default is NORMAL'
     required: false
   region:
-    description: 'Override default region (eu or us)'
+    description: 'Override default region (EU or US)'
     required: false
   variable:
     description: 'Variables in key:value format (one per line or comma-separated)'

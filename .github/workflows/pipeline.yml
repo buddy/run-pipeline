@@ -48,7 +48,7 @@ jobs:
           identifier: a1_2
           comment: 'Testing region override to US'
           branch: master
-          region: us
+          region: US
 
       - name: Run pipeline with variables
         uses: ./

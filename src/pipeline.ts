@@ -9,8 +9,8 @@ enum PRIORITY {
 }
 
 enum REGION {
-  EU = 'eu',
-  US = 'us',
+  EU = 'EU',
+  US = 'US',
 }
 
 enum VARIABLE_TYPE {
@@ -42,7 +42,7 @@ function validatePriority(priority: string): string {
 
 function validateRegion(region: string): string {
   const validRegions: string[] = Object.values(REGION);
-  const normalized = region.toLowerCase();
+  const normalized = region.toUpperCase();
 
   if (!validRegions.includes(normalized)) {
     throw new Error(
@@ -106,11 +106,8 @@ function addPriority(args: string[], priority: string): void {
 
 function addRegion(args: string[], region: string): void {
   const normalized = validateRegion(region);
-  const regionKey = Object.entries(REGION).find(
-    ([_, value]) => value === normalized,
-  )?.[0];
 
-  info(`Overriding region to: ${regionKey}`);
+  info(`Overriding region to: ${normalized}`);
   args.push('--region', normalized);
 }
 
