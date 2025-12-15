@@ -1,6 +1,6 @@
 name: Edge Cases Testing
 
-on: [workflow_dispatch]
+on: [push, pull_request, workflow_dispatch]
 
 jobs:
   validation-errors:
@@ -64,7 +64,7 @@ jobs:
           workspace: buddy-workshop-devs
           project: tttt
           identifier: a1
-          variable: key:value:with:many:colons::::::
+          variable: 'key:value:with:many:colons::::::'
 
   cli-errors:
     name: Test CLI-level errors
