@@ -162,6 +162,7 @@ jobs:
           workspace: buddy-workshop-devs
           project: tttt
           identifier: a1
+          branch: master
           comment: 'Testing non-boolean values - should be treated as false'
           refresh: yes
           clear-cache: 1
