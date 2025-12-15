@@ -1,8 +1,25 @@
-import { getInput, info, setFailed } from '@actions/core';
+import { getInput, info, setFailed, warning } from '@actions/core';
 import { ensureBdyInstalled } from '@/api/bdy';
 import { checkBuddyCredentials, runPipeline } from '@/pipeline';
 import type { PipelineInputs } from '@/types/inputs';
 import { normalizeError } from '@/utils/error';
+
+function parseBooleanInput(name: string): boolean {
+  const value = getInput(name);
+
+  if (!value) {
+    return false;
+  }
+
+  if (value !== 'true' && value !== 'false') {
+    warning(
+      `Invalid boolean value for '${name}': "${value}". Expected 'true' or 'false'. Treating as false.`,
+    );
+    return false;
+  }
+
+  return value === 'true';
+}
 
 async function run(): Promise<void> {
   await ensureBdyInstalled();
@@ -18,8 +35,8 @@ async function run(): Promise<void> {
     tag: getInput('tag') || undefined,
     revision: getInput('revision') || undefined,
     pullRequest: getInput('pull-request') || undefined,
-    refresh: getInput('refresh') === 'true',
-    clearCache: getInput('clear-cache') === 'true',
+    refresh: parseBooleanInput('refresh'),
+    clearCache: parseBooleanInput('clear-cache'),
     priority: getInput('priority') || undefined,
     region: getInput('region') || undefined,
     variable: getInput('variable') || undefined,
