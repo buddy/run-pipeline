@@ -24,6 +24,8 @@ async function run(): Promise<void> {
     region: getInput('region') || undefined,
     variable: getInput('variable') || undefined,
     variableMasked: getInput('variable-masked') || undefined,
+    schedule: getInput('schedule') || undefined,
+    action: getInput('action') || undefined,
   };
 
   await runPipeline(inputs);

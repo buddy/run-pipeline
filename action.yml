@@ -52,6 +52,12 @@ inputs:
   variable-masked:
     description: 'Masked variables in key:value format (one per line or comma-separated)'
     required: false
+  schedule:
+    description: 'Schedule execution time (e.g., 2016-11-18T12:38:16.000Z or 30s, 10m, 3h10m30s)'
+    required: false
+  action:
+    description: 'Action ID(s) to run (one per line or comma-separated)'
+    required: false
 
 runs:
   using: 'node24'

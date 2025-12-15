@@ -63,3 +63,13 @@ jobs:
             var3:value3
             var4:value4
           variable-masked: masked1:secret1,masked2:secret2,masked3:secret3
+
+      - name: Run pipeline with schedule and action
+        uses: ./
+        with:
+          workspace: buddy-workshop-devs
+          project: tttt
+          identifier: action-pick
+          comment: 'Testing schedule and action parameters'
+          schedule: 10s
+          action: 1717106

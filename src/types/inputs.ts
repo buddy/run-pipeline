@@ -14,4 +14,6 @@ export interface PipelineInputs {
   region?: string;
   variable?: string;
   variableMasked?: string;
+  schedule?: string;
+  action?: string;
 }

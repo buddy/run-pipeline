@@ -13,7 +13,7 @@ enum REGION {
   US = 'us',
 }
 
-function prepareVariables(input: string): string[] {
+function parseList(input: string): string[] {
   return input
     .split(/[\n,]/)
     .map((v) => v.trim())
@@ -97,7 +97,7 @@ export async function runPipeline(inputs: PipelineInputs): Promise<void> {
   }
 
   if (inputs.variable) {
-    const variables = prepareVariables(inputs.variable);
+    const variables = parseList(inputs.variable);
     for (const variable of variables) {
       if (!variable.includes(':')) {
         throw new Error(
@@ -109,7 +109,7 @@ export async function runPipeline(inputs: PipelineInputs): Promise<void> {
   }
 
   if (inputs.variableMasked) {
-    const variables = prepareVariables(inputs.variableMasked);
+    const variables = parseList(inputs.variableMasked);
     for (const variable of variables) {
       if (!variable.includes(':')) {
         throw new Error(
@@ -117,6 +117,17 @@ export async function runPipeline(inputs: PipelineInputs): Promise<void> {
         );
       }
       args.push('--variable-masked', variable);
+    }
+  }
+
+  if (inputs.schedule) {
+    args.push('--schedule', inputs.schedule);
+  }
+
+  if (inputs.action) {
+    const actions = parseList(inputs.action);
+    for (const action of actions) {
+      args.push('--action', action);
     }
   }
 
