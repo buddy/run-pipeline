@@ -76,14 +76,17 @@ export async function runPipeline(inputs: PipelineInputs): Promise<void> {
 
   if (inputs.region) {
     const validRegions: string[] = Object.values(REGION);
-    const lowerRegion = inputs.region.toLowerCase();
-    if (!validRegions.includes(lowerRegion)) {
+    const region = inputs.region.toLowerCase();
+    if (!validRegions.includes(region)) {
       throw new Error(
         `Invalid region: "${inputs.region}". Must be one of: ${validRegions.join(', ')}`,
       );
     }
-    info(`Overriding region to: ${lowerRegion}`);
-    args.push('--region', lowerRegion);
+    const regionKey = Object.entries(REGION).find(
+      ([_, value]) => value === region,
+    )?.[0];
+    info(`Overriding region to: ${regionKey}`);
+    args.push('--region', region);
   }
 
   if (inputs.wait) {
