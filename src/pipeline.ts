@@ -82,6 +82,7 @@ export async function runPipeline(inputs: PipelineInputs): Promise<void> {
         `Invalid region: "${inputs.region}". Must be one of: ${validRegions.join(', ')}`,
       );
     }
+    info(`Overriding region to: ${lowerRegion}`);
     args.push('--region', lowerRegion);
   }
 
