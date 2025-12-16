@@ -21,9 +21,10 @@ enum VARIABLE_TYPE {
 
 const VARIABLE_FORMAT_REGEX = /:/
 
-function parseList(input: string): string[] {
+function parseList(input: string, allowCommas: boolean = true): string[] {
+  const delimiter = allowCommas ? /[\n,]/ : /\n/
   return input
-    .split(/[\n,]/)
+    .split(delimiter)
     .map((v) => v.trim())
     .filter((v) => v.length > 0)
 }
@@ -109,7 +110,7 @@ function addRegion(args: string[], region: string): void {
 }
 
 function addVariables(args: string[], input: string, flag: string, type: VARIABLE_TYPE): void {
-  const variables = parseList(input)
+  const variables = parseList(input, false)
 
   for (const variable of variables) {
     validateVariable(variable, type)

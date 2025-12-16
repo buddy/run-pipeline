@@ -62,7 +62,10 @@ jobs:
             var2:value2
             var3:value3
             var4:value4
-          variable-masked: masked1:secret1,masked2:secret2,masked3:secret3
+          variable-masked: |
+            masked1:secret1
+            masked2:secret2
+            masked3:secret3
 
       - name: Run pipeline with schedule and action
         uses: ./

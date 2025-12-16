@@ -45,10 +45,10 @@ inputs:
     description: 'Override default region (EU or US)'
     required: false
   variable:
-    description: 'Variables in key:value format (one per line or comma-separated)'
+    description: 'Variables in key:value format (one per line)'
     required: false
   variable-masked:
-    description: 'Masked variables in key:value format (one per line or comma-separated)'
+    description: 'Masked variables in key:value format (one per line)'
     required: false
   schedule:
     description: 'Schedule execution time (e.g., 2016-11-18T12:38:16.000Z or 30s, 10m, 3h10m30s)'

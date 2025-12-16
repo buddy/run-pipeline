@@ -153,8 +153,8 @@ jobs:
 | `clear-cache`     | No       | Clear cache before running the pipeline (`true`/`false`)                                          |
 | `priority`        | No       | Run priority: `LOW`, `NORMAL`, or `HIGH` (default: `NORMAL`)                                      |
 | `region`          | No       | Override default region: `EU` or `US`                                                             |
-| `variable`        | No       | Variables in `key:value` format (one per line or comma-separated)                                 |
-| `variable-masked` | No       | Masked variables in `key:value` format (one per line or comma-separated)                          |
+| `variable`        | No       | Variables in `key:value` format (one per line)                                                    |
+| `variable-masked` | No       | Masked variables in `key:value` format (one per line)                                             |
 | `schedule`        | No       | Schedule execution time (e.g., `2016-11-18T12:38:16.000Z` or `30s`, `10m`, `3h10m30s`)            |
 | `action`          | No       | Action ID(s) to run (one per line or comma-separated). If not provided, runs all pipeline actions |
 | `api`             | No       | Override API URL                                                                                  |
