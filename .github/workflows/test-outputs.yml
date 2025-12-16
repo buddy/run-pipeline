@@ -1,0 +1,56 @@
+name: Test Outputs and Environment Variables
+
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  test-outputs:
+    name: Test pipeline outputs
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to Buddy
+        uses: buddy/login@v1
+        with:
+          token: ${{ secrets.TOKEN }}
+          region: 'US'
+
+      - name: Run pipeline
+        id: pipeline
+        uses: ./
+        with:
+          workspace: buddy-workshop-devs
+          project: tttt
+          identifier: a1
+          branch: master
+
+      - name: Check BUDDY_RUN_URL environment variable
+        run: |
+          if [ -z "$BUDDY_RUN_URL" ]; then
+            echo "ERROR: BUDDY_RUN_URL environment variable is not set"
+            exit 1
+          else
+            echo "SUCCESS: BUDDY_RUN_URL is set to: $BUDDY_RUN_URL"
+          fi
+
+      - name: Check run_url output
+        run: |
+          if [ -z "${{ steps.pipeline.outputs.run_url }}" ]; then
+            echo "ERROR: run_url output is not set"
+            exit 1
+          else
+            echo "SUCCESS: run_url output is set to: ${{ steps.pipeline.outputs.run_url }}"
+          fi
+
+      - name: Verify both values match
+        run: |
+          if [ "$BUDDY_RUN_URL" != "${{ steps.pipeline.outputs.run_url }}" ]; then
+            echo "ERROR: BUDDY_RUN_URL and run_url output do not match"
+            echo "BUDDY_RUN_URL: $BUDDY_RUN_URL"
+            echo "run_url: ${{ steps.pipeline.outputs.run_url }}"
+            exit 1
+          else
+            echo "SUCCESS: Both values match: $BUDDY_RUN_URL"
+          fi
