@@ -1,11 +1,9 @@
 name: 'Run Buddy Pipeline'
 description: 'Runs Buddy CI/CD pipelines from GitHub Actions'
-author: 'Buddy'
-
-branding:
-  icon: 'play'
-  color: 'blue'
-
+author: 'Marcel Gańczarczyk'
+runs:
+  using: 'node24'
+  main: 'dist/index.js'
 inputs:
   workspace:
     description: 'Buddy workspace domain'
@@ -58,7 +56,6 @@ inputs:
   action:
     description: 'Action ID(s) to run (one per line or comma-separated)'
     required: false
-
-runs:
-  using: 'node24'
-  main: 'dist/index.js'
+branding:
+  icon: 'play'
+  color: 'blue'

@@ -1,29 +1,29 @@
-import { getInput, info, setFailed, warning } from '@actions/core';
-import { ensureBdyInstalled } from '@/api/bdy';
-import { checkBuddyCredentials, runPipeline } from '@/pipeline';
-import type { PipelineInputs } from '@/types/inputs';
-import { normalizeError } from '@/utils/error';
+import { getInput, info, setFailed, warning } from '@actions/core'
+import { ensureBdyInstalled } from '@/api/bdy'
+import { checkBuddyCredentials, runPipeline } from '@/pipeline'
+import type { PipelineInputs } from '@/types/inputs'
+import { normalizeError } from '@/utils/error'
 
 function parseBooleanInput(name: string): boolean {
-  const value = getInput(name);
+  const value = getInput(name)
 
   if (!value) {
-    return false;
+    return false
   }
 
   if (value !== 'true' && value !== 'false') {
     warning(
       `Invalid boolean value for '${name}': "${value}". Expected 'true' or 'false'. Treating as false.`,
-    );
-    return false;
+    )
+    return false
   }
 
-  return value === 'true';
+  return value === 'true'
 }
 
 async function run(): Promise<void> {
-  await ensureBdyInstalled();
-  checkBuddyCredentials();
+  await ensureBdyInstalled()
+  checkBuddyCredentials()
 
   const inputs: PipelineInputs = {
     workspace: getInput('workspace', { required: true }),
@@ -43,18 +43,18 @@ async function run(): Promise<void> {
     variableMasked: getInput('variable-masked') || undefined,
     schedule: getInput('schedule') || undefined,
     action: getInput('action') || undefined,
-  };
+  }
 
-  await runPipeline(inputs);
+  await runPipeline(inputs)
 
-  if (!inputs.wait) info('Pipeline run initiated successfully');
+  if (!inputs.wait) info('Pipeline run initiated successfully')
 }
 
 run()
   .then(() => {
-    process.exit(0);
+    process.exit(0)
   })
   .catch((error: unknown) => {
-    setFailed(normalizeError(error));
-    process.exit(1);
-  });
+    setFailed(normalizeError(error))
+    process.exit(1)
+  })

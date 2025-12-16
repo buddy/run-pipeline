@@ -5,10 +5,10 @@
  */
 export function normalizeError(error: unknown): string | Error {
   if (error instanceof Error) {
-    return error;
+    return error
   }
   if (typeof error === 'string') {
-    return error;
+    return error
   }
   if (
     error !== null &&
@@ -16,14 +16,14 @@ export function normalizeError(error: unknown): string | Error {
     'message' in error &&
     typeof error.message === 'string'
   ) {
-    return error.message;
+    return error.message
   }
   if (error !== null && error !== undefined) {
     try {
-      return JSON.stringify(error);
+      return JSON.stringify(error)
     } catch {
-      return 'An error occurred (non-serializable)';
+      return 'An error occurred (non-serializable)'
     }
   }
-  return 'An unknown error occurred';
+  return 'An unknown error occurred'
 }

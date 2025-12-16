@@ -1,6 +1,6 @@
-import { arch, platform } from 'node:os';
-import { info } from '@actions/core';
-import { exec } from '@actions/exec';
+import { arch, platform } from 'node:os'
+import { info } from '@actions/core'
+import { exec } from '@actions/exec'
 
 enum SUPPORTED_PLATFORM {
   LINUX = 'linux',
@@ -14,14 +14,14 @@ enum SUPPORTED_ARCHITECTURE {
 }
 
 interface PlatformInfo {
-  platform: SUPPORTED_PLATFORM;
-  architecture: SUPPORTED_ARCHITECTURE;
-  downloadPrefix: string;
-  fileExtension: string;
+  platform: SUPPORTED_PLATFORM
+  architecture: SUPPORTED_ARCHITECTURE
+  downloadPrefix: string
+  fileExtension: string
 }
 
-const BDY_ENV = 'prod';
-const VERSION_REGEX = /^\d+\.\d+\.\d+(-[\w.]+)?/;
+const BDY_ENV = 'prod'
+const VERSION_REGEX = /^\d+\.\d+\.\d+(-[\w.]+)?/
 
 /**
  * Fetches the latest BDY CLI version from the Buddy API
@@ -30,26 +30,22 @@ const VERSION_REGEX = /^\d+\.\d+\.\d+(-[\w.]+)?/;
  * @throws Error if the fetch fails
  */
 async function fetchLatestVersion(env: string): Promise<string> {
-  const url = `https://es.buddy.works/bdy/${env}/latest`;
+  const url = `https://es.buddy.works/bdy/${env}/latest`
 
   try {
-    const response = await fetch(url);
+    const response = await fetch(url)
 
     if (!response.ok) {
-      throw new Error(
-        `Failed to fetch latest version: ${response.status} ${response.statusText}`,
-      );
+      throw new Error(`Failed to fetch latest version: ${response.status} ${response.statusText}`)
     }
 
-    const version = await response.text();
-    return version.trim();
+    const version = await response.text()
+    return version.trim()
   } catch (error) {
     if (error instanceof Error) {
-      throw new Error(
-        `Failed to fetch latest version from ${url}: ${error.message}`,
-      );
+      throw new Error(`Failed to fetch latest version from ${url}: ${error.message}`)
     }
-    throw new Error(`Failed to fetch latest version from ${url}`);
+    throw new Error(`Failed to fetch latest version from ${url}`)
   }
 }
 
@@ -63,29 +59,27 @@ function getPlatformInfo(): PlatformInfo {
     ['linux', SUPPORTED_PLATFORM.LINUX],
     ['darwin', SUPPORTED_PLATFORM.DARWIN],
     ['win32', SUPPORTED_PLATFORM.WIN32],
-  ]);
+  ])
 
   const ARCH_MAP = new Map<string, SUPPORTED_ARCHITECTURE>([
     ['x64', SUPPORTED_ARCHITECTURE.X64],
     ['arm64', SUPPORTED_ARCHITECTURE.ARM64],
-  ]);
+  ])
 
-  const systemPlatform = platform();
-  const systemArch = arch();
+  const systemPlatform = platform()
+  const systemArch = arch()
 
-  const detectedPlatform = PLATFORM_MAP.get(systemPlatform);
-  const detectedArch = ARCH_MAP.get(systemArch);
+  const detectedPlatform = PLATFORM_MAP.get(systemPlatform)
+  const detectedArch = ARCH_MAP.get(systemArch)
 
   if (!detectedPlatform) {
     throw new Error(
       `Unsupported platform: ${systemPlatform}. Only linux, darwin, and win32 are supported. `,
-    );
+    )
   }
 
   if (!detectedArch) {
-    throw new Error(
-      `Unsupported architecture: ${systemArch}. Only x64 and arm64 are supported. `,
-    );
+    throw new Error(`Unsupported architecture: ${systemArch}. Only x64 and arm64 are supported. `)
   }
 
   // Validate platform + architecture combinations
@@ -93,33 +87,27 @@ function getPlatformInfo(): PlatformInfo {
     detectedPlatform === SUPPORTED_PLATFORM.DARWIN &&
     detectedArch === SUPPORTED_ARCHITECTURE.X64
   ) {
-    throw new Error(
-      'macOS x64 is not supported. Only darwin-arm64 binaries are available.',
-    );
+    throw new Error('macOS x64 is not supported. Only darwin-arm64 binaries are available.')
   }
 
   if (
     detectedPlatform === SUPPORTED_PLATFORM.WIN32 &&
     detectedArch === SUPPORTED_ARCHITECTURE.ARM64
   ) {
-    throw new Error(
-      'Windows ARM64 is not supported. Only win-x64 binaries are available.',
-    );
+    throw new Error('Windows ARM64 is not supported. Only win-x64 binaries are available.')
   }
 
   // Determine file extension and download prefix
-  const fileExtension =
-    detectedPlatform === SUPPORTED_PLATFORM.WIN32 ? '.zip' : '.tar.gz';
-  const platformName =
-    detectedPlatform === SUPPORTED_PLATFORM.WIN32 ? 'win' : detectedPlatform;
-  const downloadPrefix = `${platformName}-${detectedArch}`;
+  const fileExtension = detectedPlatform === SUPPORTED_PLATFORM.WIN32 ? '.zip' : '.tar.gz'
+  const platformName = detectedPlatform === SUPPORTED_PLATFORM.WIN32 ? 'win' : detectedPlatform
+  const downloadPrefix = `${platformName}-${detectedArch}`
 
   return {
     platform: detectedPlatform,
     architecture: detectedArch,
     downloadPrefix,
     fileExtension,
-  };
+  }
 }
 
 /**
@@ -128,11 +116,11 @@ function getPlatformInfo(): PlatformInfo {
  */
 export async function isBdyInstalled(): Promise<boolean> {
   try {
-    const command = platform() === 'win32' ? 'where' : 'which';
-    const exitCode = await exec(command, ['bdy'], { silent: true });
-    return exitCode === 0;
+    const command = platform() === 'win32' ? 'where' : 'which'
+    const exitCode = await exec(command, ['bdy'], { silent: true })
+    return exitCode === 0
   } catch {
-    return false;
+    return false
   }
 }
 
@@ -142,28 +130,28 @@ export async function isBdyInstalled(): Promise<boolean> {
  */
 export async function getBdyVersion(): Promise<string> {
   try {
-    let output = '';
+    let output = ''
     await exec('bdy', ['version'], {
       silent: true,
       listeners: {
         stdout: (data: Buffer) => {
-          output += data.toString();
+          output += data.toString()
         },
       },
-    });
+    })
 
-    const lines = output.trim().split('\n');
+    const lines = output.trim().split('\n')
 
     for (let i = lines.length - 1; i >= 0; i--) {
-      const line = lines[i]?.trim();
+      const line = lines[i]?.trim()
       if (line && VERSION_REGEX.test(line)) {
-        return line;
+        return line
       }
     }
 
-    return output.trim();
+    return output.trim()
   } catch {
-    return 'unknown';
+    return 'unknown'
   }
 }
 
@@ -171,48 +159,48 @@ export async function getBdyVersion(): Promise<string> {
  * Installs BDY CLI using the download method
  */
 async function installBdyCli(): Promise<void> {
-  const platformInfo = getPlatformInfo();
-  const version = await fetchLatestVersion(BDY_ENV);
+  const platformInfo = getPlatformInfo()
+  const version = await fetchLatestVersion(BDY_ENV)
 
-  info(`Installing BDY CLI (${version}) for ${platformInfo.downloadPrefix}...`);
+  info(`Installing BDY CLI (${version}) for ${platformInfo.downloadPrefix}...`)
 
-  const fileName = `bdy${platformInfo.fileExtension}`;
-  const url = `https://es.buddy.works/bdy/${BDY_ENV}/${version}/${platformInfo.downloadPrefix}${platformInfo.fileExtension}`;
+  const fileName = `bdy${platformInfo.fileExtension}`
+  const url = `https://es.buddy.works/bdy/${BDY_ENV}/${version}/${platformInfo.downloadPrefix}${platformInfo.fileExtension}`
 
   // macOS requires creating the directory first
   if (platformInfo.platform === SUPPORTED_PLATFORM.DARWIN) {
-    await exec('sudo', ['mkdir', '-p', '-m', '755', '/usr/local/bin']);
+    await exec('sudo', ['mkdir', '-p', '-m', '755', '/usr/local/bin'])
   }
 
   try {
-    await exec('curl', ['-fL', url, '-o', fileName]);
+    await exec('curl', ['-fL', url, '-o', fileName])
   } catch {
-    throw new Error(`Failed to download BDY CLI. URL: ${url}`);
+    throw new Error(`Failed to download BDY CLI. URL: ${url}`)
   }
 
   // Extract based on file type
   if (platformInfo.platform === SUPPORTED_PLATFORM.WIN32) {
-    await exec('tar', ['-xf', fileName]);
+    await exec('tar', ['-xf', fileName])
   } else {
-    await exec('sudo', ['tar', '-zxf', fileName, '-C', '/usr/local/bin/']);
+    await exec('sudo', ['tar', '-zxf', fileName, '-C', '/usr/local/bin/'])
   }
 
-  await exec('rm', [fileName]);
+  await exec('rm', [fileName])
 }
 
 /**
  * Ensures BDY CLI is installed and ready to use
  */
 export async function ensureBdyInstalled(): Promise<void> {
-  const isInstalled = await isBdyInstalled();
+  const isInstalled = await isBdyInstalled()
 
   if (isInstalled) {
-    const version = await getBdyVersion();
-    info(`BDY CLI is already installed (version: ${version})`);
+    const version = await getBdyVersion()
+    info(`BDY CLI is already installed (version: ${version})`)
   } else {
-    info('BDY CLI not found, installing...');
-    await installBdyCli();
-    const version = await getBdyVersion();
-    info(`BDY CLI installed successfully (version: ${version})`);
+    info('BDY CLI not found, installing...')
+    await installBdyCli()
+    const version = await getBdyVersion()
+    info(`BDY CLI installed successfully (version: ${version})`)
   }
 }
