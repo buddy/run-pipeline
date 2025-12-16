@@ -138,26 +138,26 @@ jobs:
 
 ## Inputs
 
-| Input              | Required | Description                                                                                       |
-| ------------------ | -------- |---------------------------------------------------------------------------------------------------|
-| `workspace`        | Yes      | Buddy workspace domain                                                                            |
-| `project`          | Yes      | Buddy project name (URL handle)                                                                   |
-| `identifier`       | Yes      | Pipeline identifier (human-readable ID)                                                           |
-| `comment`          | No       | Run comment (e.g., commit hash, build info)                                                       |
-| `wait`             | No       | Wait for run to finish (minutes). If not provided, returns execution URL immediately              |
-| `branch`           | No       | Repository branch name                                                                            |
-| `tag`              | No       | Repository tag name                                                                               |
-| `revision`         | No       | Repository revision (commit SHA)                                                                  |
-| `pull-request`     | No       | Repository pull request ID                                                                        |
-| `refresh`          | No       | Deploy from scratch (`true`/`false`)                                                              |
-| `clear-cache`      | No       | Clear cache before running the pipeline (`true`/`false`)                                          |
-| `priority`         | No       | Run priority: `LOW`, `NORMAL`, or `HIGH` (default: `NORMAL`)                                      |
-| `region`           | No       | Override default region: `EU` or `US`                                                             |
-| `variable`         | No       | Variables in `key:value` format (one per line or comma-separated)                                 |
-| `variable-masked`  | No       | Masked variables in `key:value` format (one per line or comma-separated)                          |
-| `schedule`         | No       | Schedule execution time (e.g., `2016-11-18T12:38:16.000Z` or `30s`, `10m`, `3h10m30s`)            |
-| `action`           | No       | Action ID(s) to run (one per line or comma-separated). If not provided, runs all pipeline actions |
-| `api_url`          | No       | Override API URL                                                                                  |
+| Input             | Required | Description                                                                                       |
+|-------------------| -------- |---------------------------------------------------------------------------------------------------|
+| `workspace`       | Yes      | Buddy workspace domain                                                                            |
+| `project`         | Yes      | Buddy project name (URL handle)                                                                   |
+| `identifier`      | Yes      | Pipeline identifier (human-readable ID)                                                           |
+| `comment`         | No       | Run comment (e.g., commit hash, build info)                                                       |
+| `wait`            | No       | Wait for run to finish (minutes). If not provided, returns execution URL immediately              |
+| `branch`          | No       | Repository branch name                                                                            |
+| `tag`             | No       | Repository tag name                                                                               |
+| `revision`        | No       | Repository revision (commit SHA)                                                                  |
+| `pull-request`    | No       | Repository pull request ID                                                                        |
+| `refresh`         | No       | Deploy from scratch (`true`/`false`)                                                              |
+| `clear-cache`     | No       | Clear cache before running the pipeline (`true`/`false`)                                          |
+| `priority`        | No       | Run priority: `LOW`, `NORMAL`, or `HIGH` (default: `NORMAL`)                                      |
+| `region`          | No       | Override default region: `EU` or `US`                                                             |
+| `variable`        | No       | Variables in `key:value` format (one per line or comma-separated)                                 |
+| `variable-masked` | No       | Masked variables in `key:value` format (one per line or comma-separated)                          |
+| `schedule`        | No       | Schedule execution time (e.g., `2016-11-18T12:38:16.000Z` or `30s`, `10m`, `3h10m30s`)            |
+| `action`          | No       | Action ID(s) to run (one per line or comma-separated). If not provided, runs all pipeline actions |
+| `api`             | No       | Override API URL                                                                                  |
 
 ## Outputs
 
