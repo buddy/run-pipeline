@@ -202,7 +202,7 @@ By default, this action automatically installs the latest BDY CLI from the produ
     installation_method: 'npm'
 ```
 
-See the [buddy/setup](https://github.com/buddy/setup) action for more options.
+See the [`buddy/setup`](https://github.com/buddy/setup) action for more options.
 
 ## License
 
