@@ -1,4 +1,4 @@
-import { info, setSecret } from '@actions/core'
+import { exportVariable, info, setOutput, setSecret } from '@actions/core'
 import type { PipelineInputs } from '@/types/inputs'
 import { executeCommand } from '@/utils/command'
 
@@ -173,7 +173,15 @@ export async function runPipeline(inputs: PipelineInputs): Promise<void> {
     addVariables(args, inputs.variableMasked, '--variable-masked', VARIABLE_TYPE.MASKED_VARIABLE)
   if (inputs.schedule) args.push('--schedule', inputs.schedule)
   if (inputs.action) addActions(args, inputs.action)
+  if (inputs.api) args.push('--api', inputs.api)
   if (inputs.wait) addWaitTime(args, inputs.wait)
 
-  await executeCommand('bdy', args)
+  const output = await executeCommand(process.env.BDY_PATH || 'bdy', args)
+  const urlMatch = output.match(/https?:\/\/\S+/)
+
+  if (urlMatch) {
+    const runUrl = urlMatch[0]
+    setOutput('run_url', runUrl)
+    exportVariable('BUDDY_RUN_URL', runUrl)
+  }
 }

@@ -56,6 +56,12 @@ inputs:
   action:
     description: 'Action ID(s) to run (one per line or comma-separated)'
     required: false
+  api:
+    description: 'Override API URL'
+    required: false
+outputs:
+  run_url:
+    description: 'The URL of the pipeline execution'
 branding:
   icon: 'play'
   color: 'blue'

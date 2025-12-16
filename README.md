@@ -139,12 +139,12 @@ jobs:
 ## Inputs
 
 | Input              | Required | Description                                                                                       |
-| ------------------ | -------- | ------------------------------------------------------------------------------------------------- |
+| ------------------ | -------- |---------------------------------------------------------------------------------------------------|
 | `workspace`        | Yes      | Buddy workspace domain                                                                            |
 | `project`          | Yes      | Buddy project name (URL handle)                                                                   |
 | `identifier`       | Yes      | Pipeline identifier (human-readable ID)                                                           |
 | `comment`          | No       | Run comment (e.g., commit hash, build info)                                                       |
-| `wait`             | No       | Wait for run to finish (minutes). If not provided, returns execution URL immediately             |
+| `wait`             | No       | Wait for run to finish (minutes). If not provided, returns execution URL immediately              |
 | `branch`           | No       | Repository branch name                                                                            |
 | `tag`              | No       | Repository tag name                                                                               |
 | `revision`         | No       | Repository revision (commit SHA)                                                                  |
@@ -155,8 +155,23 @@ jobs:
 | `region`           | No       | Override default region: `EU` or `US`                                                             |
 | `variable`         | No       | Variables in `key:value` format (one per line or comma-separated)                                 |
 | `variable-masked`  | No       | Masked variables in `key:value` format (one per line or comma-separated)                          |
-| `schedule`         | No       | Schedule execution time (e.g., `2016-11-18T12:38:16.000Z` or `30s`, `10m`, `3h10m30s`)           |
+| `schedule`         | No       | Schedule execution time (e.g., `2016-11-18T12:38:16.000Z` or `30s`, `10m`, `3h10m30s`)            |
 | `action`           | No       | Action ID(s) to run (one per line or comma-separated). If not provided, runs all pipeline actions |
+| `api_url`          | No       | Override API URL                                                                                  |
+
+## Outputs
+
+| Output     | Description                          |
+| ---------- | ------------------------------------ |
+| `run_url`  | The URL of the pipeline execution    |
+
+## Environment Variables
+
+The action exports the following environment variables for use in subsequent steps:
+
+| Variable          | Description                          |
+| ----------------- | ------------------------------------ |
+| `BUDDY_RUN_URL`   | The URL of the pipeline execution    |
 
 ## Prerequisites
 

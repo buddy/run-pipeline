@@ -16,4 +16,5 @@ export interface PipelineInputs {
   variableMasked?: string
   schedule?: string
   action?: string
+  api?: string
 }

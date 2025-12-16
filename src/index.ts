@@ -43,6 +43,7 @@ async function run(): Promise<void> {
     variableMasked: getInput('variable-masked') || undefined,
     schedule: getInput('schedule') || undefined,
     action: getInput('action') || undefined,
+    api: getInput('api') || undefined,
   }
 
   await runPipeline(inputs)

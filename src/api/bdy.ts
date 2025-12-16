@@ -116,6 +116,12 @@ function getPlatformInfo(): PlatformInfo {
  */
 export async function isBdyInstalled(): Promise<boolean> {
   try {
+    const bdyPath = process.env.BDY_PATH
+    if (bdyPath) {
+      const exitCode = await exec(bdyPath, ['version'], { silent: true })
+      return exitCode === 0
+    }
+
     const command = platform() === 'win32' ? 'where' : 'which'
     const exitCode = await exec(command, ['bdy'], { silent: true })
     return exitCode === 0
@@ -131,7 +137,7 @@ export async function isBdyInstalled(): Promise<boolean> {
 export async function getBdyVersion(): Promise<string> {
   try {
     let output = ''
-    await exec('bdy', ['version'], {
+    await exec(process.env.BDY_PATH || 'bdy', ['version'], {
       silent: true,
       listeners: {
         stdout: (data: Buffer) => {
