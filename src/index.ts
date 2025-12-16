@@ -1,7 +1,7 @@
 import { getInput, info, setFailed, warning } from '@actions/core'
 import { ensureBdyInstalled } from '@/api/bdy'
 import { checkBuddyCredentials, runPipeline } from '@/pipeline'
-import type { PipelineInputs } from '@/types/inputs'
+import type { IInputs } from '@/types/inputs'
 import { normalizeError } from '@/utils/error'
 
 function parseBooleanInput(name: string): boolean {
@@ -25,7 +25,7 @@ async function run(): Promise<void> {
   await ensureBdyInstalled()
   checkBuddyCredentials()
 
-  const inputs: PipelineInputs = {
+  const inputs: IInputs = {
     workspace: getInput('workspace', { required: true }),
     project: getInput('project', { required: true }),
     identifier: getInput('identifier', { required: true }),

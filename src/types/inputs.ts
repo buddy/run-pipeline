@@ -1,4 +1,4 @@
-export interface PipelineInputs {
+export interface IInputs {
   workspace: string
   project: string
   identifier: string

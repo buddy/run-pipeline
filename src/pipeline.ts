@@ -1,5 +1,6 @@
 import { exportVariable, info, setOutput, setSecret } from '@actions/core'
-import type { PipelineInputs } from '@/types/inputs'
+import type { IInputs } from '@/types/inputs'
+import type { IOutputs } from '@/types/outputs'
 import { executeCommand } from '@/utils/command'
 
 enum PRIORITY {
@@ -71,7 +72,7 @@ function validateVariable(variable: string, type: VARIABLE_TYPE): void {
   }
 }
 
-function buildReferenceInfo(inputs: PipelineInputs): string {
+function buildReferenceInfo(inputs: IInputs): string {
   const refInfo: string[] = []
 
   if (inputs.branch) refInfo.push(`branch '${inputs.branch}'`)
@@ -82,7 +83,7 @@ function buildReferenceInfo(inputs: PipelineInputs): string {
   return refInfo.length > 0 ? ` (on ${refInfo.join(', ')})` : ''
 }
 
-function addSimpleArgs(args: string[], inputs: PipelineInputs): void {
+function addSimpleArgs(args: string[], inputs: IInputs): void {
   if (inputs.comment) args.push('--comment', inputs.comment)
   if (inputs.branch) args.push('--branch', inputs.branch)
   if (inputs.tag) args.push('--tag', inputs.tag)
@@ -90,7 +91,7 @@ function addSimpleArgs(args: string[], inputs: PipelineInputs): void {
   if (inputs.pullRequest) args.push('--pull-request', inputs.pullRequest)
 }
 
-function addBooleanFlags(args: string[], inputs: PipelineInputs): void {
+function addBooleanFlags(args: string[], inputs: IInputs): void {
   if (inputs.refresh) args.push('--refresh')
   if (inputs.clearCache) args.push('--clear-cache')
 }
@@ -149,7 +150,7 @@ export function checkBuddyCredentials(): void {
   info('Buddy credentials found')
 }
 
-export async function runPipeline(inputs: PipelineInputs): Promise<void> {
+export async function runPipeline(inputs: IInputs): Promise<IOutputs> {
   const refInfo = buildReferenceInfo(inputs)
   info(`Running pipeline: ${inputs.identifier} in ${inputs.workspace}/${inputs.project}${refInfo}`)
 
@@ -179,9 +180,14 @@ export async function runPipeline(inputs: PipelineInputs): Promise<void> {
   const output = await executeCommand(process.env.BDY_PATH || 'bdy', args)
   const urlMatch = output.match(/https?:\/\/\S+/)
 
+  const outputs: IOutputs = {}
+
   if (urlMatch) {
     const runUrl = urlMatch[0]
+    outputs.runUrl = runUrl
     setOutput('run_url', runUrl)
     exportVariable('BUDDY_RUN_URL', runUrl)
   }
+
+  return outputs
 }
