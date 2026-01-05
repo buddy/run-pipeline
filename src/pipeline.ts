@@ -1,18 +1,7 @@
 import { exportVariable, info, setOutput, setSecret } from '@actions/core'
-import type { IInputs } from '@/types/inputs'
+import { PRIORITY, REGION, type IInputs } from '@/types/inputs'
 import type { IOutputs } from '@/types/outputs'
 import { executeCommand } from '@/utils/command'
-
-enum PRIORITY {
-  LOW = 'LOW',
-  NORMAL = 'NORMAL',
-  HIGH = 'HIGH',
-}
-
-enum REGION {
-  EU = 'EU',
-  US = 'US',
-}
 
 enum VARIABLE_TYPE {
   VARIABLE = 'variable',

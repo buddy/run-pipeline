@@ -1,3 +1,15 @@
+export enum PRIORITY {
+  LOW = 'LOW',
+  NORMAL = 'NORMAL',
+  HIGH = 'HIGH',
+}
+
+export enum REGION {
+  EU = 'EU',
+  US = 'US',
+  AP = 'AP',
+}
+
 export interface IInputs {
   workspace: string
   project: string

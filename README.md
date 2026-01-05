@@ -91,7 +91,7 @@ jobs:
     project: my-project
     identifier: deploy
     priority: HIGH          # LOW, NORMAL, or HIGH
-    region: EU              # EU or US
+    region: EU              # EU, US, or AP
     refresh: true           # Deploy from scratch
     clear-cache: true       # Clear cache before running
 ```
@@ -152,7 +152,7 @@ jobs:
 | `refresh`         | No       | Deploy from scratch (`true`/`false`)                                                              |
 | `clear-cache`     | No       | Clear cache before running the pipeline (`true`/`false`)                                          |
 | `priority`        | No       | Run priority: `LOW`, `NORMAL`, or `HIGH` (default: `NORMAL`)                                      |
-| `region`          | No       | Override default region: `EU` or `US`                                                             |
+| `region`          | No       | Override default region: `EU`, `US`, or `AP`                                                      |
 | `variable`        | No       | Variables in `key:value` format (one per line)                                                    |
 | `variable-masked` | No       | Masked variables in `key:value` format (one per line)                                             |
 | `schedule`        | No       | Schedule execution time (e.g., `2016-11-18T12:38:16.000Z` or `30s`, `10m`, `3h10m30s`)            |
