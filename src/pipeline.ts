@@ -1,5 +1,5 @@
 import { exportVariable, info, setOutput, setSecret } from '@actions/core'
-import { PRIORITY, REGION, type IInputs } from '@/types/inputs'
+import { type IInputs, PRIORITY, REGION } from '@/types/inputs'
 import type { IOutputs } from '@/types/outputs'
 import { executeCommand } from '@/utils/command'
 
