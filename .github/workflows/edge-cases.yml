@@ -23,7 +23,7 @@ jobs:
         uses: ./
         with:
           workspace: buddy-workshop-devs
-          project: tttt
+          project: ttttesty
           identifier: a1
           region: INVALID_REGION
 
@@ -32,7 +32,7 @@ jobs:
         uses: ./
         with:
           workspace: buddy-workshop-devs
-          project: tttt
+          project: ttttesty
           identifier: a1
           priority: SUPER_HIGH
 
@@ -41,7 +41,7 @@ jobs:
         uses: ./
         with:
           workspace: buddy-workshop-devs
-          project: tttt
+          project: ttttesty
           identifier: a1
           wait: -5
 
@@ -50,7 +50,7 @@ jobs:
         uses: ./
         with:
           workspace: buddy-workshop-devs
-          project: tttt
+          project: ttttesty
           identifier: a1
           variable: |
             validkey:validvalue
@@ -62,7 +62,7 @@ jobs:
         uses: ./
         with:
           workspace: buddy-workshop-devs
-          project: tttt
+          project: ttttesty
           identifier: a1
           variable: 'key:value:with:many:colons::::::'
 
@@ -71,7 +71,7 @@ jobs:
         uses: ./
         with:
           workspace: this-workspace-does-not-exist-12345
-          project: tttt
+          project: ttttesty
           identifier: a1
 
       - name: Test non-existing project
@@ -87,7 +87,7 @@ jobs:
         uses: ./
         with:
           workspace: buddy-workshop-devs
-          project: tttt
+          project: ttttesty
           identifier: a1
           branch: non-existing-branch-xyz-12345
 
@@ -96,7 +96,7 @@ jobs:
         uses: ./
         with:
           workspace: buddy-workshop-devs
-          project: tttt
+          project: ttttesty
           identifier: action-pick
           action: 99999999
 
@@ -105,7 +105,7 @@ jobs:
         uses: ./
         with:
           workspace: buddy-workshop-devs
-          project: tttt
+          project: ttttesty
           identifier: a1
           schedule: invalid-schedule-format
 
@@ -113,7 +113,7 @@ jobs:
         uses: ./
         with:
           workspace: buddy-workshop-devs
-          project: tttt
+          project: ttttesty
           identifier: a1
           branch: master
           comment: |
@@ -131,7 +131,7 @@ jobs:
         uses: ./
         with:
           workspace: buddy-workshop-devs
-          project: tttt
+          project: ttttesty
           identifier: a1
           branch: master
           comment: 'Testing non-boolean values - should be treated as false'

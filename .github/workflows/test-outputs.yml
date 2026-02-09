@@ -22,7 +22,7 @@ jobs:
         uses: ./
         with:
           workspace: buddy-workshop-devs
-          project: tttt
+          project: ttttesty
           identifier: a1
           branch: master
 

@@ -21,7 +21,7 @@ jobs:
         uses: ./
         with:
           workspace: buddy-workshop-devs
-          project: tttt
+          project: ttttesty
           identifier: a1
           comment: ${{ github.sha }}
           wait: 1
@@ -32,7 +32,7 @@ jobs:
         uses: ./
         with:
           workspace: buddy-workshop-devs
-          project: tttt
+          project: ttttesty
           identifier: a1_2
           comment: 'Testing refresh, cache, priority'
           refresh: true
@@ -40,21 +40,11 @@ jobs:
           priority: HIGH
           branch: master
 
-      - name: Run pipeline with region override
-        uses: ./
-        with:
-          workspace: buddy-workshop-devs
-          project: tttt
-          identifier: a1_2
-          comment: 'Testing region override to US'
-          branch: master
-          region: US
-
       - name: Run pipeline with variables
         uses: ./
         with:
           workspace: buddy-workshop-devs
-          project: tttt
+          project: ttttesty
           identifier: masked
           comment: 'Testing variables and masked variables'
           variable: |
@@ -71,8 +61,8 @@ jobs:
         uses: ./
         with:
           workspace: buddy-workshop-devs
-          project: tttt
+          project: ttttesty
           identifier: action-pick
           comment: 'Testing schedule and action parameters'
           schedule: 10s
-          action: 1717106
+          action: 1739926
