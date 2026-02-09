@@ -4,12 +4,6 @@ export enum PRIORITY {
   HIGH = 'HIGH',
 }
 
-export enum REGION {
-  EU = 'EU',
-  US = 'US',
-  AP = 'AP',
-}
-
 export interface IInputs {
   workspace: string
   project: string
@@ -23,10 +17,8 @@ export interface IInputs {
   refresh?: boolean
   clearCache?: boolean
   priority?: string
-  region?: string
   variable?: string
   variableMasked?: string
   schedule?: string
   action?: string
-  api?: string
 }

@@ -41,9 +41,6 @@ inputs:
   priority:
     description: 'Run priority (LOW, NORMAL, or HIGH). Default is NORMAL'
     required: false
-  region:
-    description: 'Override default region (EU, US, or AP)'
-    required: false
   variable:
     description: 'Variables in key:value format (one per line)'
     required: false
@@ -55,9 +52,6 @@ inputs:
     required: false
   action:
     description: 'Action ID(s) to run (one per line or comma-separated)'
-    required: false
-  api:
-    description: 'Override API URL'
     required: false
 outputs:
   run_url:

@@ -38,12 +38,10 @@ async function run(): Promise<void> {
     refresh: parseBooleanInput('refresh'),
     clearCache: parseBooleanInput('clear-cache'),
     priority: getInput('priority') || undefined,
-    region: getInput('region') || undefined,
     variable: getInput('variable') || undefined,
     variableMasked: getInput('variable-masked') || undefined,
     schedule: getInput('schedule') || undefined,
     action: getInput('action') || undefined,
-    api: getInput('api') || undefined,
   }
 
   await runPipeline(inputs)

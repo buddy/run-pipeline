@@ -8,7 +8,7 @@ Trigger and run Buddy CI/CD pipelines from GitHub Actions workflows.
 - Wait for pipeline completion with configurable timeout
 - Support for all pipeline parameters (branch, tag, revision, pull request)
 - Pass variables and masked variables to pipeline executions
-- Configure pipeline run options (priority, region, refresh, cache)
+- Configure pipeline run options (priority, refresh, cache)
 - Schedule pipeline runs for later execution
 - Select specific actions within a pipeline to run
 
@@ -91,7 +91,6 @@ jobs:
     project: my-project
     identifier: deploy
     priority: HIGH          # LOW, NORMAL, or HIGH
-    region: EU              # EU, US, or AP
     refresh: true           # Deploy from scratch
     clear-cache: true       # Clear cache before running
 ```
@@ -152,12 +151,10 @@ jobs:
 | `refresh`         | No       | Deploy from scratch (`true`/`false`)                                                              |
 | `clear-cache`     | No       | Clear cache before running the pipeline (`true`/`false`)                                          |
 | `priority`        | No       | Run priority: `LOW`, `NORMAL`, or `HIGH` (default: `NORMAL`)                                      |
-| `region`          | No       | Override default region: `EU`, `US`, or `AP`                                                      |
 | `variable`        | No       | Variables in `key:value` format (one per line)                                                    |
 | `variable-masked` | No       | Masked variables in `key:value` format (one per line)                                             |
 | `schedule`        | No       | Schedule execution time (e.g., `2016-11-18T12:38:16.000Z` or `30s`, `10m`, `3h10m30s`)            |
 | `action`          | No       | Action ID(s) to run (one per line or comma-separated). If not provided, runs all pipeline actions |
-| `api`             | No       | Override API URL                                                                                  |
 
 ## Outputs
 

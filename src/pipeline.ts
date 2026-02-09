@@ -1,5 +1,5 @@
 import { exportVariable, info, setOutput, setSecret } from '@actions/core'
-import { type IInputs, PRIORITY, REGION } from '@/types/inputs'
+import { type IInputs, PRIORITY } from '@/types/inputs'
 import type { IOutputs } from '@/types/outputs'
 import { executeCommand } from '@/utils/command'
 
@@ -26,17 +26,6 @@ function validatePriority(priority: string): string {
     throw new Error(
       `Invalid priority: "${priority}". Must be one of: ${validPriorities.join(', ')}`,
     )
-  }
-
-  return normalized
-}
-
-function validateRegion(region: string): string {
-  const validRegions: string[] = Object.values(REGION)
-  const normalized = region.toUpperCase()
-
-  if (!validRegions.includes(normalized)) {
-    throw new Error(`Invalid region: "${region}". Must be one of: ${validRegions.join(', ')}`)
   }
 
   return normalized
@@ -89,13 +78,6 @@ function addBooleanFlags(args: string[], inputs: IInputs): void {
 function addPriority(args: string[], priority: string): void {
   const normalized = validatePriority(priority)
   args.push('--priority', normalized)
-}
-
-function addRegion(args: string[], region: string): void {
-  const normalized = validateRegion(region)
-
-  info(`Overriding region to: ${normalized}`)
-  args.push('--region', normalized)
 }
 
 function addVariables(args: string[], input: string, flag: string, type: VARIABLE_TYPE): void {
@@ -158,13 +140,11 @@ export async function runPipeline(inputs: IInputs): Promise<IOutputs> {
   addBooleanFlags(args, inputs)
 
   if (inputs.priority) addPriority(args, inputs.priority)
-  if (inputs.region) addRegion(args, inputs.region)
   if (inputs.variable) addVariables(args, inputs.variable, '--variable', VARIABLE_TYPE.VARIABLE)
   if (inputs.variableMasked)
     addVariables(args, inputs.variableMasked, '--variable-masked', VARIABLE_TYPE.MASKED_VARIABLE)
   if (inputs.schedule) args.push('--schedule', inputs.schedule)
   if (inputs.action) addActions(args, inputs.action)
-  if (inputs.api) args.push('--api', inputs.api)
   if (inputs.wait) addWaitTime(args, inputs.wait)
 
   const output = await executeCommand(process.env.BDY_PATH || 'bdy', args)
