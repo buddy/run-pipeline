@@ -67,6 +67,8 @@ jobs:
           workspace: buddy-workshop-devs
           project: ttttesty
           identifier: action-pick
-          comment: 'Testing schedule and action parameters'
+          comment: 'Testing schedule and multiple action parameters'
           schedule: 10s
-          action: 1739926
+          action: |
+            1739926
+            1772594
