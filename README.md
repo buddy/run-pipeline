@@ -5,7 +5,7 @@ Trigger and run Buddy CI/CD pipelines from GitHub Actions workflows.
 ## Features
 
 - Run Buddy pipelines directly from GitHub Actions
-- Wait for pipeline completion with configurable timeout
+- Wait for pipeline completion by default, or fire-and-forget with `no-wait`
 - Support for all pipeline parameters (branch, tag, revision, pull request)
 - Pass variables and masked variables to pipeline executions
 - Configure pipeline run options (priority, refresh, cache)
@@ -40,16 +40,18 @@ jobs:
           identifier: deploy-prod
 ```
 
-### Wait for Completion
+### Fire-and-forget (no-wait)
+
+By default, the action waits for the pipeline run to finish. Set `no-wait: true` to return as soon as the run is queued — the execution URL is still captured in `BUDDY_RUN_URL`.
 
 ```yaml
-- name: Run pipeline and wait
+- name: Trigger pipeline without waiting
   uses: buddy/run-pipeline@v1
   with:
     workspace: my-workspace
     project: my-project
     identifier: deploy-prod
-    wait: 10  # Wait up to 10 minutes for completion
+    no-wait: true
 ```
 
 ### With Git References
@@ -143,7 +145,7 @@ jobs:
 | `project`         | Yes      | Buddy project name (URL handle)                                                                   |
 | `identifier`      | Yes      | Pipeline identifier (human-readable ID)                                                           |
 | `comment`         | No       | Run comment (e.g., commit hash, build info)                                                       |
-| `wait`            | No       | Wait for run to finish (minutes). If not provided, returns execution URL immediately              |
+| `no-wait`         | No       | Do not wait for the run to finish; return immediately. Default: `false` (waits for completion)    |
 | `branch`          | No       | Repository branch name                                                                            |
 | `tag`             | No       | Repository tag name                                                                               |
 | `revision`        | No       | Repository revision (commit SHA)                                                                  |
