@@ -59,3 +59,22 @@ jobs:
           else
             echo "SUCCESS: Both values match: $BUDDY_RUN_URL"
           fi
+
+      - name: Run pipeline (no-wait)
+        id: pipeline-no-wait
+        uses: ./
+        with:
+          workspace: buddy-workshop-devs
+          project: ttttesty
+          identifier: a1
+          branch: master
+          no-wait: true
+
+      - name: Check run_url output is set without waiting
+        run: |
+          if [ -z "${{ steps.pipeline-no-wait.outputs.run_url }}" ]; then
+            echo "ERROR: run_url output is not set in no-wait mode"
+            exit 1
+          else
+            echo "SUCCESS: run_url output captured without waiting: ${{ steps.pipeline-no-wait.outputs.run_url }}"
+          fi
