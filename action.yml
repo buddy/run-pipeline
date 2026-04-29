@@ -17,8 +17,8 @@ inputs:
   comment:
     description: 'Run comment (e.g., commit hash, build info)'
     required: false
-  wait:
-    description: 'Wait for run to finish (minutes). If not provided, returns execution URL immediately.'
+  no-wait:
+    description: 'Do not wait for the run to finish; return immediately. Default is false (waits for the run to finish).'
     required: false
   branch:
     description: 'Repository branch name'

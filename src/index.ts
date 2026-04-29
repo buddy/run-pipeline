@@ -30,7 +30,7 @@ async function run(): Promise<void> {
     project: getInput('project', { required: true }),
     identifier: getInput('identifier', { required: true }),
     comment: getInput('comment') || undefined,
-    wait: getInput('wait') || undefined,
+    noWait: parseBooleanInput('no-wait'),
     branch: getInput('branch') || undefined,
     tag: getInput('tag') || undefined,
     revision: getInput('revision') || undefined,
@@ -46,7 +46,7 @@ async function run(): Promise<void> {
 
   await runPipeline(inputs)
 
-  if (!inputs.wait) info('Pipeline run initiated successfully')
+  if (inputs.noWait) info('Pipeline run initiated successfully')
 }
 
 run()

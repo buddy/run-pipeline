@@ -9,7 +9,7 @@ export interface IInputs {
   project: string
   identifier: string
   comment?: string
-  wait?: string
+  noWait?: boolean
   branch?: string
   tag?: string
   revision?: string

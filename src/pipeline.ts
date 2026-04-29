@@ -31,20 +31,6 @@ function validatePriority(priority: string): string {
   return normalized
 }
 
-function validateWaitTime(wait: string): number {
-  const waitTime = Number.parseInt(wait, 10)
-
-  if (Number.isNaN(waitTime)) {
-    throw new Error(`Invalid wait value: "${wait}". Must be a number.`)
-  }
-
-  if (waitTime < 0) {
-    throw new Error('Wait time cannot be negative')
-  }
-
-  return waitTime
-}
-
 function validateVariable(variable: string, type: VARIABLE_TYPE): void {
   if (!VARIABLE_FORMAT_REGEX.test(variable)) {
     throw new Error(`Invalid ${type} format: "${variable}". Must be in key:value format.`)
@@ -97,9 +83,8 @@ function addActions(args: string[], input: string): void {
   }
 }
 
-function addWaitTime(args: string[], wait: string): void {
-  validateWaitTime(wait)
-  args.push('--wait', wait)
+function addNoWaitFlag(args: string[], noWait: boolean | undefined): void {
+  if (noWait) args.push('--no-wait')
 }
 
 export function checkBuddyCredentials(): void {
@@ -129,6 +114,7 @@ export async function runPipeline(inputs: IInputs): Promise<IOutputs> {
   const args = [
     'pipeline',
     'run',
+    'start',
     inputs.identifier,
     '--workspace',
     inputs.workspace,
@@ -145,7 +131,7 @@ export async function runPipeline(inputs: IInputs): Promise<IOutputs> {
     addVariables(args, inputs.variableMasked, '--variable-masked', VARIABLE_TYPE.MASKED_VARIABLE)
   if (inputs.schedule) args.push('--schedule', inputs.schedule)
   if (inputs.action) addActions(args, inputs.action)
-  if (inputs.wait) addWaitTime(args, inputs.wait)
+  addNoWaitFlag(args, inputs.noWait)
 
   const output = await executeCommand(process.env.BDY_PATH || 'bdy', args)
   const urlMatch = output.match(/https?:\/\/\S+/)

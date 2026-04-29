@@ -15,7 +15,12 @@ jobs:
         uses: buddy/login@v1
         with:
           token: ${{ secrets.TOKEN }}
-          region: 'US'
+
+      - name: Setup BDY CLI
+        uses: buddy/setup@v1
+        with:
+          env: 'dev'
+          installation_method: 'npm'
 
       - name: Run pipeline
         uses: ./
@@ -24,7 +29,6 @@ jobs:
           project: ttttesty
           identifier: a1
           comment: ${{ github.sha }}
-          wait: 1
           branch: master
           tag: v1
 

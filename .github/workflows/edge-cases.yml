@@ -16,16 +16,12 @@ jobs:
         uses: buddy/login@v1
         with:
           token: ${{ secrets.TOKEN }}
-          region: 'US'
 
-      - name: Test invalid region
-        continue-on-error: true
-        uses: ./
+      - name: Setup BDY CLI
+        uses: buddy/setup@v1
         with:
-          workspace: buddy-workshop-devs
-          project: ttttesty
-          identifier: a1
-          region: INVALID_REGION
+          env: 'dev'
+          installation_method: 'npm'
 
       - name: Test invalid priority
         continue-on-error: true
@@ -36,14 +32,14 @@ jobs:
           identifier: a1
           priority: SUPER_HIGH
 
-      - name: Test negative wait
+      - name: Test invalid no-wait value
         continue-on-error: true
         uses: ./
         with:
           workspace: buddy-workshop-devs
           project: ttttesty
           identifier: a1
-          wait: -5
+          no-wait: not-a-boolean
 
       - name: Test variable without colon
         continue-on-error: true
