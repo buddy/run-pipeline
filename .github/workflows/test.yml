@@ -1,30 +1,250 @@
-name: Lint
+name: Test
 
-on: [push, pull_request, workflow_dispatch]
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
 
 jobs:
-  lint:
-    name: Lint
+  test-basic:
+    name: Basic runs
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: buddy/login@v1
         with:
-          node-version: '24'
-          cache: 'pnpm'
+          token: ${{ secrets.BUDDY_TOKEN }}
+      - uses: buddy/setup@v1
+        with:
+          env: 'dev'
+          installation_method: 'npm'
 
-      - name: Install dependencies
-        run: pnpm install
+      - name: Run pipeline
+        uses: ./
+        with:
+          workspace: buddy-gha-tests
+          project: pipelines
+          identifier: a1
+          comment: ${{ github.sha }}
+          branch: master
+          tag: v1
 
-      - name: Run lint
-        run: pnpm lint
+      - name: Run with advanced options
+        uses: ./
+        with:
+          workspace: buddy-gha-tests
+          project: pipelines
+          identifier: a1_2
+          comment: 'Testing refresh, cache, priority'
+          refresh: true
+          clear-cache: true
+          priority: HIGH
+          branch: master
 
-      - name: Run type check
-        run: pnpm lint:types
+      - name: Run with variables
+        uses: ./
+        with:
+          workspace: buddy-gha-tests
+          project: pipelines
+          identifier: masked
+          comment: 'Testing variables and masked variables'
+          variable: |
+            var1:value1
+            var2:value2
+            var3:value3
+            var4:value4
+          variable-masked: |
+            masked1:secret1
+            masked2:secret2
+            masked3:secret3
+
+      - name: Run with schedule and action selection
+        uses: ./
+        with:
+          workspace: buddy-gha-tests
+          project: pipelines
+          identifier: action-pick
+          comment: 'Testing schedule and multiple action parameters'
+          schedule: 10s
+          action: |
+            1780463
+            1780465
+
+  test-outputs:
+    name: Outputs + env vars
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: buddy/login@v1
+        with:
+          token: ${{ secrets.BUDDY_TOKEN }}
+      - uses: buddy/setup@v1
+        with:
+          env: 'dev'
+          installation_method: 'npm'
+
+      - name: Run pipeline
+        id: pipeline
+        uses: ./
+        with:
+          workspace: buddy-gha-tests
+          project: pipelines
+          identifier: a1
+          branch: master
+
+      - name: Verify BUDDY_RUN_URL is set
+        run: |
+          if [ -z "$BUDDY_RUN_URL" ]; then
+            echo "ERROR: BUDDY_RUN_URL not set"; exit 1
+          fi
+          echo "BUDDY_RUN_URL: $BUDDY_RUN_URL"
+      - name: Verify run_url output is set
+        run: |
+          if [ -z "${{ steps.pipeline.outputs.run_url }}" ]; then
+            echo "ERROR: run_url output not set"; exit 1
+          fi
+      - name: Verify BUDDY_RUN_URL matches output
+        run: |
+          if [ "$BUDDY_RUN_URL" != "${{ steps.pipeline.outputs.run_url }}" ]; then
+            echo "Mismatch: $BUDDY_RUN_URL vs ${{ steps.pipeline.outputs.run_url }}"; exit 1
+          fi
+
+      - name: Run pipeline with no-wait
+        id: pipeline-no-wait
+        uses: ./
+        with:
+          workspace: buddy-gha-tests
+          project: pipelines
+          identifier: a1
+          branch: master
+          no-wait: true
+      - name: Verify no-wait run_url is set
+        run: |
+          if [ -z "${{ steps.pipeline-no-wait.outputs.run_url }}" ]; then
+            echo "ERROR: run_url not set in no-wait"; exit 1
+          fi
+
+  test-edge-cases:
+    name: Edge cases
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v5
+      - uses: buddy/login@v1
+        with:
+          token: ${{ secrets.BUDDY_TOKEN }}
+      - uses: buddy/setup@v1
+        with:
+          env: 'dev'
+          installation_method: 'npm'
+
+      - name: Invalid priority (SUPER_HIGH)
+        continue-on-error: true
+        uses: ./
+        with:
+          workspace: buddy-gha-tests
+          project: pipelines
+          identifier: a1
+          priority: SUPER_HIGH
+
+      - name: Non-boolean no-wait
+        continue-on-error: true
+        uses: ./
+        with:
+          workspace: buddy-gha-tests
+          project: pipelines
+          identifier: a1
+          no-wait: not-a-boolean
+
+      - name: Variable without colon
+        continue-on-error: true
+        uses: ./
+        with:
+          workspace: buddy-gha-tests
+          project: pipelines
+          identifier: a1
+          variable: |
+            validkey:validvalue
+            invalidvariablewithoutcolon
+            anotherkey:anothervalue
+
+      - name: Variable with many colons
+        continue-on-error: true
+        uses: ./
+        with:
+          workspace: buddy-gha-tests
+          project: pipelines
+          identifier: a1
+          variable: 'key:value:with:many:colons::::::'
+
+      - name: Non-existent workspace
+        continue-on-error: true
+        uses: ./
+        with:
+          workspace: this-workspace-does-not-exist-12345
+          project: pipelines
+          identifier: a1
+
+      - name: Non-existent project
+        continue-on-error: true
+        uses: ./
+        with:
+          workspace: buddy-gha-tests
+          project: this-project-does-not-exist-12345
+          identifier: a1
+
+      - name: Non-existent branch
+        continue-on-error: true
+        uses: ./
+        with:
+          workspace: buddy-gha-tests
+          project: pipelines
+          identifier: a1
+          branch: non-existing-branch-xyz-12345
+
+      - name: Non-existent action ID
+        continue-on-error: true
+        uses: ./
+        with:
+          workspace: buddy-gha-tests
+          project: pipelines
+          identifier: action-pick
+          action: 99999999
+
+      - name: Invalid schedule format
+        continue-on-error: true
+        uses: ./
+        with:
+          workspace: buddy-gha-tests
+          project: pipelines
+          identifier: a1
+          schedule: invalid-schedule-format
+
+      - name: Markdown comment
+        uses: ./
+        with:
+          workspace: buddy-gha-tests
+          project: pipelines
+          identifier: a1
+          branch: master
+          comment: |
+            # Test Comment with Markdown
+
+            - **Bold text**
+            - *Italic text*
+            - `code block`
+
+            ## Subsection
+
+            This should work fine!
+
+      - name: Non-boolean truthy values (refresh=yes, clear-cache=1)
+        uses: ./
+        with:
+          workspace: buddy-gha-tests
+          project: pipelines
+          identifier: a1
+          branch: master
+          comment: 'Testing non-boolean values - should be treated as false'
+          refresh: yes
+          clear-cache: 1

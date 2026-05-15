@@ -42,7 +42,7 @@ jobs:
 
 ### Fire-and-forget (no-wait)
 
-By default, the action waits for the pipeline run to finish. Set `no-wait: true` to return as soon as the run is queued — the execution URL is still captured in `BUDDY_RUN_URL`.
+By default, the action waits for the pipeline run to finish. Set `no-wait: true` to return as soon as the run is queued - the execution URL is still captured in `BUDDY_RUN_URL`.
 
 ```yaml
 - name: Trigger pipeline without waiting
@@ -92,9 +92,9 @@ By default, the action waits for the pipeline run to finish. Set `no-wait: true`
     workspace: my-workspace
     project: my-project
     identifier: deploy
-    priority: HIGH          # LOW, NORMAL, or HIGH
-    refresh: true           # Deploy from scratch
-    clear-cache: true       # Clear cache before running
+    priority: HIGH # LOW, NORMAL, or HIGH
+    refresh: true # Deploy from scratch
+    clear-cache: true # Clear cache before running
 ```
 
 ### With Variables
@@ -124,7 +124,7 @@ By default, the action waits for the pipeline run to finish. Set `no-wait: true`
     workspace: my-workspace
     project: my-project
     identifier: maintenance
-    schedule: 30m  # Run in 30 minutes (supports: 30s, 10m, 3h10m30s, or ISO 8601)
+    schedule: 30m # Run in 30 minutes (supports: 30s, 10m, 3h10m30s, or ISO 8601)
 
 - name: Run specific actions only
   uses: buddy/run-pipeline@v1
@@ -140,7 +140,7 @@ By default, the action waits for the pipeline run to finish. Set `no-wait: true`
 ## Inputs
 
 | Input             | Required | Description                                                                                       |
-|-------------------| -------- |---------------------------------------------------------------------------------------------------|
+| ----------------- | -------- | ------------------------------------------------------------------------------------------------- |
 | `workspace`       | Yes      | Buddy workspace domain                                                                            |
 | `project`         | Yes      | Buddy project name (URL handle)                                                                   |
 | `identifier`      | Yes      | Pipeline identifier (human-readable ID)                                                           |
@@ -160,17 +160,17 @@ By default, the action waits for the pipeline run to finish. Set `no-wait: true`
 
 ## Outputs
 
-| Output     | Description                          |
-| ---------- | ------------------------------------ |
-| `run_url`  | The URL of the pipeline execution    |
+| Output    | Description                       |
+| --------- | --------------------------------- |
+| `run_url` | The URL of the pipeline execution |
 
 ## Environment Variables
 
 The action exports the following environment variables for use in subsequent steps:
 
-| Variable          | Description                          |
-| ----------------- | ------------------------------------ |
-| `BUDDY_RUN_URL`   | The URL of the pipeline execution    |
+| Variable        | Description                       |
+| --------------- | --------------------------------- |
+| `BUDDY_RUN_URL` | The URL of the pipeline execution |
 
 ## Prerequisites
 
@@ -185,6 +185,7 @@ This action requires authentication with Buddy. Use the [`buddy/login`](https://
 ```
 
 The login action sets the following environment variables that are used by this action:
+
 - `BUDDY_TOKEN` - Authentication token
 - `BUDDY_API_ENDPOINT` - API endpoint URL
 
