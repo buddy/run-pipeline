@@ -157,7 +157,7 @@ By default, the action waits for the pipeline run to finish. Set `no-wait: true`
 | `variable-masked` | No       | Masked variables in `key:value` format (one per line)                                             |
 | `schedule`        | No       | Schedule execution time (e.g., `2016-11-18T12:38:16.000Z` or `30s`, `10m`, `3h10m30s`)            |
 | `action`          | No       | Action ID(s) to run (one per line or comma-separated). If not provided, runs all pipeline actions |
-| `debug`           | No       | Enable debug logging; on command failure also dumps the BDY CLI log (`~/.bdy/cli.log`)            |
+| `debug`           | No       | Run the BDY CLI in DEBUG mode and dump `~/.bdy/cli.log` on failure                                |
 
 ## Outputs
 
@@ -224,7 +224,7 @@ See the [`buddy/setup`](https://github.com/buddy/setup) action for more options.
 
 If a BDY CLI command fails, the action throws an error that includes the exit code, the command that was run, and its captured output.
 
-To also dump the BDY CLI log (`~/.bdy/cli.log`) on failure, enable debug logging in either of these ways:
+Enabling debug runs the BDY CLI in DEBUG mode, so it writes verbose logs to `~/.bdy/cli.log`, and on failure dumps that log (plus a stack trace) into the workflow output. Enable it in either of these ways:
 
 - **Per step** — set the `debug` input on this action:
 
