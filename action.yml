@@ -53,6 +53,9 @@ inputs:
   action:
     description: 'Action ID(s) to run (one per line or comma-separated)'
     required: false
+  debug:
+    description: 'Enable debug logging. On command failure, also dumps the BDY CLI log (~/.bdy/cli.log).'
+    required: false
 outputs:
   run_url:
     description: 'The URL of the pipeline execution'

@@ -248,3 +248,37 @@ jobs:
           comment: 'Testing non-boolean values - should be treated as false'
           refresh: yes
           clear-cache: 1
+
+  test-debug-cli-log:
+    name: debug dumps bdy cli.log on failure
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: buddy/login@v1
+        with:
+          token: ${{ secrets.BUDDY_TOKEN }}
+      - uses: buddy/setup@v1
+        with:
+          env: 'dev'
+          installation_method: 'npm'
+
+      - name: Failing run with debug
+        id: debug-run
+        continue-on-error: true
+        uses: ./
+        with:
+          workspace: buddy-gha-tests
+          project: this-project-does-not-exist-${{ github.run_id }}
+          identifier: a1
+          debug: true
+
+      - name: Verify it failed and bdy wrote cli.log where we read it
+        run: |
+          [ "${{ steps.debug-run.outcome }}" == "failure" ] || {
+            echo "expected the run to fail"; exit 1; }
+          log="$HOME/.bdy/cli.log"
+          if [ ! -s "$log" ]; then
+            echo "expected $log to exist and be non-empty"
+            exit 1
+          fi
+          echo "cli.log found at $log"
