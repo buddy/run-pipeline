@@ -262,23 +262,25 @@ jobs:
           env: 'dev'
           installation_method: 'npm'
 
-      - name: Failing run with debug
+      - name: Run failing pipeline with debug
         id: debug-run
         continue-on-error: true
         uses: ./
         with:
           workspace: buddy-gha-tests
-          project: this-project-does-not-exist-${{ github.run_id }}
-          identifier: a1
+          project: pipelines
+          identifier: fail
           debug: true
 
-      - name: Verify it failed and bdy wrote cli.log where we read it
+      - name: Verify run failed and bdy cli.log was dumped
         run: |
           [ "${{ steps.debug-run.outcome }}" == "failure" ] || {
             echo "expected the run to fail"; exit 1; }
           log="$HOME/.bdy/cli.log"
           if [ ! -s "$log" ]; then
-            echo "expected $log to exist and be non-empty"
+            echo "::error::expected $log to exist and be non-empty"
+            ls -la "$HOME/.bdy" 2>/dev/null || echo "(~/.bdy does not exist)"
+            find "$HOME" -name cli.log 2>/dev/null || true
             exit 1
           fi
-          echo "cli.log found at $log"
+          echo "cli.log present at $log"
