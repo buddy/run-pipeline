@@ -86,7 +86,7 @@ jobs:
           project: pipelines
           identifier: art-test
           comment: 'Testing artifact'
-          artifact: test-artifact-download:1.0.*
+          artifact: test-artifact-download:1.0.0
 
   test-outputs:
     name: Outputs + env vars
