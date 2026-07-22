@@ -97,6 +97,21 @@ By default, the action waits for the pipeline run to finish. Set `no-wait: true`
     clear-cache: true # Clear cache before running
 ```
 
+### With Environment and Artifact
+
+`environment` is the identifier of the environment in which the pipeline execution runs. `artifact` selects an artifact version to run, in `artifact_name:version` format.
+
+```yaml
+- name: Run pipeline in an environment with a specific artifact
+  uses: buddy/run-pipeline@v1
+  with:
+    workspace: my-workspace
+    project: my-project
+    identifier: deploy
+    environment: staging
+    artifact: my_app:1.2.3 # artifact_name:version
+```
+
 ### With Variables
 
 ```yaml
@@ -153,6 +168,8 @@ By default, the action waits for the pipeline run to finish. Set `no-wait: true`
 | `refresh`         | No       | Deploy from scratch (`true`/`false`)                                                              |
 | `clear-cache`     | No       | Clear cache before running the pipeline (`true`/`false`)                                          |
 | `priority`        | No       | Run priority: `LOW`, `NORMAL`, or `HIGH` (default: `NORMAL`)                                      |
+| `environment`     | No       | Environment in which the pipeline execution runs                                                  |
+| `artifact`        | No       | Artifact version to run, in format `artifact_name:version`                                        |
 | `variable`        | No       | Variables in `key:value` format (one per line)                                                    |
 | `variable-masked` | No       | Masked variables in `key:value` format (one per line)                                             |
 | `schedule`        | No       | Schedule execution time (e.g., `2016-11-18T12:38:16.000Z` or `30s`, `10m`, `3h10m30s`)            |

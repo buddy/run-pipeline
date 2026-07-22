@@ -70,6 +70,24 @@ jobs:
             1780463
             1780465
 
+      - name: Run with environment
+        uses: ./
+        with:
+          workspace: buddy-gha-tests
+          project: pipelines
+          identifier: env-test
+          comment: 'Testing environment'
+          environment: test-env
+
+      - name: Run with artifact
+        uses: ./
+        with:
+          workspace: buddy-gha-tests
+          project: pipelines
+          identifier: art-test
+          comment: 'Testing artifact'
+          artifact: test-artifact-download:1.0.*
+
   test-outputs:
     name: Outputs + env vars
     runs-on: ubuntu-latest
@@ -219,6 +237,24 @@ jobs:
           project: pipelines
           identifier: a1
           schedule: invalid-schedule-format
+
+      - name: Non-existent environment
+        continue-on-error: true
+        uses: ./
+        with:
+          workspace: buddy-gha-tests
+          project: pipelines
+          identifier: env-test
+          environment: this-environment-does-not-exist-12345
+
+      - name: Non-existent artifact
+        continue-on-error: true
+        uses: ./
+        with:
+          workspace: buddy-gha-tests
+          project: pipelines
+          identifier: art-test
+          artifact: this-artifact-does-not-exist-12345:9.9.9
 
       - name: Markdown comment
         uses: ./

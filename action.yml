@@ -41,6 +41,12 @@ inputs:
   priority:
     description: 'Run priority (LOW, NORMAL, or HIGH). Default is NORMAL'
     required: false
+  environment:
+    description: 'Environment in which the pipeline execution runs'
+    required: false
+  artifact:
+    description: 'Artifact version to run, in format artifact_name:version'
+    required: false
   variable:
     description: 'Variables in key:value format (one per line)'
     required: false
