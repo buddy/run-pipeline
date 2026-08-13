@@ -8,6 +8,7 @@ Trigger and run Buddy CI/CD pipelines from GitHub Actions workflows.
 - Wait for pipeline completion by default, or fire-and-forget with `no-wait`
 - Support for all pipeline parameters (branch, tag, revision, pull request)
 - Pass variables and masked variables to pipeline executions
+- Upload a file or directory from the runner as the run payload
 - Configure pipeline run options (priority, refresh, cache)
 - Schedule pipeline runs for later execution
 - Select specific actions within a pipeline to run
@@ -130,6 +131,32 @@ By default, the action waits for the pipeline run to finish. Set `no-wait: true`
       DB_PASSWORD:${{ secrets.DB_PASSWORD }}
 ```
 
+### With Payload
+
+`payload` uploads a file or directory from the runner to the execution, and Buddy unpacks it next to the repository checkout.
+
+```yaml
+- name: Run pipeline with payload
+  uses: buddy/run-pipeline@v1
+  with:
+    workspace: my-workspace
+    project: my-project
+    identifier: deploy
+    payload: dist
+```
+
+Paths are relative to the repository root, and what the execution sees depends on whether the path is a directory or a file:
+
+| `payload`                    | Files in the execution                                                      |
+| ---------------------------- | --------------------------------------------------------------------------- |
+| `dist`                       | `app.js`, `assets/app.css` - contents of the directory, subdirectories kept |
+| `build/reports/summary.json` | `summary.json` - a file arrives under its own name                          |
+
+Notes:
+
+- Buddy accepts **at most 50 files** per run (counted across all subdirectories) and **100 MB per file**.
+- An empty directory, or one holding nothing but subdirectories, fails the step. The payload is uploaded before the run is created, so a rejected payload means no execution was started.
+
 ### With Schedule and Action Selection
 
 ```yaml
@@ -172,6 +199,7 @@ By default, the action waits for the pipeline run to finish. Set `no-wait: true`
 | `artifact`        | No       | Artifact version to run, in format `artifact_name:version`                                        |
 | `variable`        | No       | Variables in `key:value` format (one per line)                                                    |
 | `variable-masked` | No       | Masked variables in `key:value` format (one per line)                                             |
+| `payload`         | No       | Path to a file or directory uploaded as the run payload (max 50 files, 100 MB each)               |
 | `schedule`        | No       | Schedule execution time (e.g., `2016-11-18T12:38:16.000Z` or `30s`, `10m`, `3h10m30s`)            |
 | `action`          | No       | Action ID(s) to run (one per line or comma-separated). If not provided, runs all pipeline actions |
 | `debug`           | No       | Run the BDY CLI in DEBUG mode and dump `~/.bdy/cli.log` on failure                                |

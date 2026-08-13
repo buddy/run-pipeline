@@ -88,6 +88,33 @@ jobs:
           comment: 'Testing artifact'
           artifact: test-artifact-download:1.0.0
 
+      - name: Create payload fixtures
+        run: |
+          mkdir -p payload-fixture/nested/deep
+          echo '{"from":"github-actions"}' > payload-fixture/config.json
+          echo 'nested' > payload-fixture/nested/file.txt
+          echo 'deeper' > payload-fixture/nested/deep/file.txt
+
+      - name: Run with payload directory
+        uses: ./
+        with:
+          workspace: buddy-gha-tests
+          project: pipelines
+          identifier: a1
+          branch: master
+          comment: 'Testing payload directory'
+          payload: payload-fixture
+
+      - name: Run with payload file
+        uses: ./
+        with:
+          workspace: buddy-gha-tests
+          project: pipelines
+          identifier: a1
+          branch: master
+          comment: 'Testing payload file'
+          payload: payload-fixture/config.json
+
   test-outputs:
     name: Outputs + env vars
     runs-on: ubuntu-latest
@@ -219,6 +246,28 @@ jobs:
           project: pipelines
           identifier: a1
           branch: non-existing-branch-xyz-12345
+
+      - name: Non-existent payload path
+        continue-on-error: true
+        uses: ./
+        with:
+          workspace: buddy-gha-tests
+          project: pipelines
+          identifier: a1
+          branch: master
+          payload: this-payload-file-does-not-exist.txt
+
+      - name: Empty payload directory
+        run: mkdir -p empty-payload
+      - name: Run with an empty payload directory
+        continue-on-error: true
+        uses: ./
+        with:
+          workspace: buddy-gha-tests
+          project: pipelines
+          identifier: a1
+          branch: master
+          payload: empty-payload
 
       - name: Non-existent action ID
         continue-on-error: true
